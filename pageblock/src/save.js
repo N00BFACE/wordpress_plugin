@@ -1,46 +1,48 @@
 import { useBlockProps } from '@wordpress/block-editor';
 import { RichText } from '@wordpress/block-editor';
+import { Card, CardBody, CardFooter } from '@wordpress/components';
 
 export default function save( { attributes } ) {
 	const {
 		header_title, header_subtitle, image,
-		showTitle, showSubtitle, showHeader, showImage, showRow,
-		row_one, showRowOne, showRowOneImage, showRowOneText,
-		row_two, showRowTwo, showRowTwoImage, showRowTwoText,
+		showTitle, showSubtitle, showHeader, showImage,
+		row_one, showRowOne, showRowOneImage, showRowOneSubtitle, showRowOneTitle, showRowOneText,
+		row_two, showRowTwo, showRowTwoImage, showRowTwoSubtitle, showRowTwoTitle, showRowTwoText,
+		showAboutUs, staff_one, staff_two, staff_three,
 	} = attributes;
 	return (
-		<div { ...useBlockProps.save() } >
+		<div { ...useBlockProps.save() } style={{ maxWidth: '840px', margin: '0 auto' }} >
 			{ showHeader &&
-				<div className="wp-block-themeisle-blocks-header"
+				<div className="pageblock-home"
 					style={{
 						backgroundImage: showImage ? `url(${ image.url })` : 'none',
 						backgroundSize: 'cover',
 						backgroundRepeat: 'no-repeat',
 						backgroundAttachment: 'fixed',
-						height: '545px',
+						backgroundColor: image.color,
 					}}
 				>
 					<div style={{
 						padding: '120px 60px 120px 60px'
 					}}>
-						<div className="wp-block-themeisle-blocks-header__title"
+						<div className="pageblock-home-title"
 							style={{
 							textAlign: header_title.align,
-							color: header_title.color,
 						}}>
 							{ showTitle && 
 								<RichText.Content tagName="h2" value={ header_title.text } 
 									style={{
-										paddingTop: '1.5em',
+										color: header_title.color,
 									}}
 								/>
 							}
 						</div>
-						<div className="wp-block-themeisle-blocks-header__subtitle" style={{ textAlign: header_title.align }}>
+						<div className="pageblock-home-subtitle" style={{ textAlign: header_title.align }}>
 							{ showSubtitle &&
-								<RichText.Content tagName="small" value={ header_subtitle.text } 
+								<RichText.Content tagName="p" value={ header_subtitle.text } 
 									style={{
 										color: header_subtitle.color,
+										padding: '0 70px 0 70px'
 									}}
 								/>
 							}
@@ -48,32 +50,80 @@ export default function save( { attributes } ) {
 					</div>
 				</div>
 			}
-			{ showRow &&
-				<div className="wp-block-themeisle-blocks-body">
+			{ showAboutUs &&
+				<div className="pageblock-about-us">
 					{ showRowOne &&
-						<div className="wp-block-themeisle-blocks-body__row-one" style={{ backgroundColor: row_one.back, display: 'grid', gridTemplateColumns: '60% auto', columnGap: '20px' }} >
+						<div className="pageblock-about-us_row-one" style={{ backgroundColor: row_one.back, display: 'grid', gridTemplateColumns: '50% auto', columnGap: '20px', padding: '25px' }} >
 							{ showRowOneImage &&
-								<div>
+								<div style={{ display: 'flex' }}>
 									<img src={ row_one.url } alt={ row_one.alt } style={{ width: '100%'}} />
 								</div>
 							}
-							{ showRowOneText &&
-								<RichText.Content tagName="p" value={ row_one.text } style={{ color: row_one.color, margin: '30% 15% 0% 15%' }} />
-							}
+							<div className="pageblock-about-us-content_one">
+								{ showRowOneSubtitle &&
+									<RichText.Content tagName="small" value={ row_one.subtitle }/>
+								}
+								{ showRowOneTitle &&
+									<RichText.Content tagName="h2" value={ row_one.title }/>
+								}
+								{ showRowOneText &&
+									<RichText.Content tagName="p" value={ row_one.text }/>
+								}
+							</div>
 						</div>
 					}
 					{ showRowTwo &&
-						<div className="wp-block-themeisle-blocks-body__row-two" style={{ backgroundColor: row_two.back, display: 'grid', gridTemplateColumns: 'auto 60%', columnGap: '20px' }} >
-							{ showRowTwoText &&
-								<RichText.Content tagName="p" value={ row_two.text } style={{ color: row_two.color, padding: '30% 15% 0% 15%'}} />
-							}
+						<div className="pageblock-body-row-two" style={{ backgroundColor: row_two.back, display: 'grid', gridTemplateColumns: 'auto 50%', columnGap: '20px', padding: '25px' }} >
+							<div className="pageblock-about-us-content_two" >
+								{ showRowTwoSubtitle &&
+									<RichText.Content tagName="small" value={ row_two.subtitle }/>
+								}
+								{ showRowTwoTitle &&
+									<RichText.Content tagName="h2" value={ row_two.title }/>
+								}
+								{ showRowTwoText &&
+									<RichText.Content tagName="p" value={ row_two.text }/>
+								}
+							</div>
 							{ showRowTwoImage &&
-								<div>
+								<div style={{ display: 'flex' }}>
 									<img src={ row_two.url } alt={ row_two.alt } style={{ width: '100%'}} />
 								</div>
 							}
 						</div>
 					}
+					{/* <div className="pageblock-about-us-staff" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gridGap: '1em' }}>
+						<div>
+							<Card>
+								<CardBody>
+									<img src={ staff_one.url } alt={ staff_one.alt } style={{ width: '100%'}} />
+								</CardBody>
+								<CardFooter>
+									<RichText.Content tagName="b" value={(staff_one.name)} style={{ color: staff_one.color, }} />
+								</CardFooter>
+							</Card>
+						</div>
+						<div>
+							<Card>
+								<CardBody>
+									<img src={ staff_two.url } alt={ staff_two.alt } style={{ width: '100%'}} />
+								</CardBody>
+								<CardFooter>
+									<RichText.Content tagName="b" value={(staff_two.name)} style={{ color: staff_two.color, }} />
+								</CardFooter>
+							</Card>
+						</div>
+						<div>
+							<Card>
+								<CardBody>
+									<img src={ staff_three.url } alt={ staff_three.alt } style={{ width: '100%'}} />
+								</CardBody>
+								<CardFooter>
+									<RichText.Content tagName="b" value={(staff_three.name)} style={{ color: staff_three.color, }} />
+								</CardFooter>
+							</Card>
+						</div>
+					</div> */}
 				</div>
 			}
 		</div>

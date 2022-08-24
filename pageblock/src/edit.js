@@ -1,29 +1,31 @@
 import { __ } from '@wordpress/i18n';
 import { useBlockProps } from '@wordpress/block-editor';
 import { RichText, InspectorControls, MediaUpload, BlockControls, AlignmentToolbar } from '@wordpress/block-editor';
-import { Panel, PanelBody, Button, ToggleControl, ColorPalette } from '@wordpress/components';
+import { Panel, PanelBody, Button, ToggleControl, ColorPalette, Card, CardHeader, CardBody, CardFooter } from '@wordpress/components';
 
 export default function Edit( { attributes, setAttributes } ) {
 	const {
 		header_title, header_subtitle, image,
-		showHeader, showTitle, showSubtitle, showImage, showRow,
-		row_one, showRowOne, showRowOneImage, showRowOneText,
+		showHeader, showTitle, showSubtitle, showImage,
+		row_one, showRowOne, showRowOneImage, showRowOneSubtitle, showRowOneTitle, showRowOneText,
 		row_two, showRowTwo, showRowTwoImage, showRowTwoText,
+		showAboutUs, staff_one, staff_two, staff_three,
 	} = attributes; 	
 	return (
 		<div { ...useBlockProps() }>
 			{ showHeader && 
-				<div className="wp-block-themeisle-blocks-header" 
+				<div className="pageblock-home" 
 					style={{
 						backgroundImage: showImage ? `url(${ image.url })` : 'none',
 						backgroundSize: 'cover',
 						backgroundRepeat: 'no-repeat',
 						backgroundAttachment: 'fixed',
+						backgroundColor: image.color,
 					}}>
 					<div style={{
 						padding: '120px 60px 120px 60px'
 					}}>
-						<div className="wp-block-themeisle-blocks-header__title" 
+						<div className="pageblock-home-title" 
 							style={{
 								textAlign: header_title.align
 							}}>
@@ -39,7 +41,6 @@ export default function Edit( { attributes, setAttributes } ) {
 												}
 											} );
 										} }
-										placeholder = { __( 'Align title' ) }
 									/>
 								</BlockControls>
 							}
@@ -56,17 +57,16 @@ export default function Edit( { attributes, setAttributes } ) {
 										} );
 									} }
 									style={{
-										verticalAlign: 'middle',
 										color: header_title.color,
 									}}
-									placeholder={ __( 'Top title', 'themeisle-companion' ) }
+									placeholder= 'Home Title'
 								/>
 							}
 						</div>
-						<div className="wp-block-themeisle-blocks-header__subtitle" style= {{ textAlign: header_title.align }} >
+						<div className="pageblock-home-subtitle" style= {{ textAlign: header_title.align,}} >
 							{ showSubtitle &&
 								<RichText
-									tagName="small"
+									tagName="p"
 									value={ header_subtitle.text }
 									onChange={ ( value ) => {
 										setAttributes( {
@@ -78,188 +78,365 @@ export default function Edit( { attributes, setAttributes } ) {
 									} }
 									style={{
 										color: header_subtitle.color,
+										padding: '0 70px 0 70px'
 									}}
-									placeholder={ __( 'Top subtitle', 'themeisle-companion' ) }
+									placeholder= 'Home Subtitle'
 								/>
 							}
 						</div>
 					</div>
 				</div> 
 			}
-			{ showRow &&
-				<div className="wp-block-themeisle-blocks-body">
+			{ showAboutUs && 
+				<div className="pageblock-about-us">
 					{ showRowOne &&
-						<div className="wp-block-themeisle-blocks-body__row-one" style={{ backgroundColor: row_one.back, display: 'grid', gridTemplateColumns: '60% auto', columnGap: '20px'}}>
+						<div className="pageblock-about-us-row-one" style={{ backgroundColor: row_one.back, display: 'grid', gridTemplateColumns: '50% auto', columnGap: '20px', padding: '25px'}}>
 							{ showRowOneImage &&
 								(row_one.url != 0) ? (
-									<div>
+									<div style={{ display: 'flex' }}>
 										<img src={ row_one.url } alt={ row_one.alt } style={{ width: '100%'}} />
-										<Button onClick={ () => {
-											setAttributes( {
-												row_one: {
-													...row_one,
-													id: 0,
-													url: '',
-													alt: '',
-												}
-											} );
-										}
-										} className="button button-primary" style={{ marginLeft: '5vh', marginTop: '1vh', marginBottom: '1vh' }} >
-											{ __( 'Remove Image' ) }
-										</Button>
-										<MediaUpload
-											onSelect={ ( media ) => {
-												setAttributes( {
-													row_one: {
-														...row_one,
-														id: media.id,
-														url: media.url,
-														alt: media.alt,
-													}
-												} );
-											}}
-											value={ row_one.id }
-											render={ ( { open } ) => (
-												<Button onClick={ open } className="button" style={{ marginLeft: '5vh', marginTop: '1vh', marginBottom: '1vh' }}>
-													{ __( 'Change Image' ) }
-												</Button>
-											) }
-										/>
 									</div>
 								) : (
 									<div>
+										<Card>
+											<CardHeader>
+												Choose Your Media
+											</CardHeader>
+											<CardBody>
+												<MediaUpload
+													onSelect={ ( media ) => {
+														setAttributes( {
+															row_one: {
+																...row_one,
+																id: media.id,
+																url: media.url,
+																alt: media.alt,
+															}
+														} );
+													}}
+													value={ row_one.id }
+													render={ ( { open } ) => (
+														<Button onClick={ open } className="button">
+															{ __( 'Select Image' ) }
+														</Button>
+													) }
+												/>
+											</CardBody>
+											<CardFooter>
+												<small>
+													Please choose your pictures from media library or upload new one.
+												</small>
+											</CardFooter>
+										</Card>
+									</div>
+								)
+							}
+							<div className="pageblock-about-us-content-one">	
+								{ showRowOneSubtitle &&
+									<RichText
+										placeholder='...Write Subtitle'
+										tagName="small"
+										value={ row_one.subtitle }
+										onChange={ ( value ) => {
+											setAttributes( {
+												row_one: {
+													...row_one,
+													subtitle: value,
+												}
+											} );
+										} }
+										style={{
+											color: row_one.color,
+										}}
+									/>
+								}
+								{ showRowOneTitle &&
+									<RichText
+										placeholder='...Write Title'
+										tagName="h2"
+										value={ row_one.title }
+										onChange={ ( value ) => {
+											setAttributes( {
+												row_one: {
+													...row_one,
+													title: value,
+												}
+											} );
+										} }
+										style={{
+											color: row_one.color,
+										}}
+									/>
+								}
+								{ showRowOneText &&
+									<RichText
+										placeholder='...Write Content'
+										tagName="p"
+										value={ row_one.text }
+										onChange={ ( value ) => {
+											setAttributes( {
+												row_one: {
+													...row_one,
+													text: value,
+												}
+											} );
+										} }
+										style={{
+											color: row_one.color,
+										}}
+									/>
+								}
+							</div>
+						</div>
+					}
+					{ showRowTwo &&
+						<div className="pageblock-about-us-row-two" style={{ backgroundColor: row_two.back, display: 'grid', gridTemplateColumns: 'auto 50%', columnGap: '20px', padding: '25px' }}>
+							<div className="pageblock-about-us-content-two">	
+								{ showRowTwoText &&
+									<RichText
+										placeholder='...Write Subtitle'
+										tagName="small"
+										value={ row_two.subtitle }
+										onChange={ ( value ) => {
+											setAttributes( {
+												row_two: {
+													...row_two,
+													subtitle: value,
+												}
+											} );
+										} }
+										style={{
+											color: row_two.color,
+										}}
+									/>
+								}
+								{ showRowTwoText &&
+									<RichText
+										placeholder='...Write Title'
+										tagName="h2"
+										value={ row_two.title }
+										onChange={ ( value ) => {
+											setAttributes( {
+												row_two: {
+													...row_two,
+													title: value,
+												}
+											} );
+										} }
+										style={{
+											color: row_two.color,
+										}}
+									/>
+								}
+								{ showRowTwoText &&
+									<RichText
+										placeholder='...Write Content'
+										tagName="p"
+										value={ row_two.text }
+										onChange={ ( value ) => {
+											setAttributes( {
+												row_two: {
+													...row_two,
+													text: value,
+												}
+											} );
+										} }
+										style={{
+											color: row_two.color,
+										}}
+									/>
+								}
+							</div>
+							{ showRowTwoImage &&
+								(row_two.url != 0) ? (
+									<div style={{ display: 'flex' }}>
+										<img src={ row_two.url } alt={ row_two.alt } style={{ width: '100%'}} />
+									</div>
+								) : (
+									<div>
+										<Card>
+											<CardHeader>
+												Choose Your Media
+											</CardHeader>
+											<CardBody>
+												<MediaUpload
+													onSelect={ ( media ) => {
+														setAttributes( {
+															row_two: {
+																...row_two,
+																id: media.id,
+																url: media.url,
+																alt: media.alt,
+															}
+														} );
+													}}
+													value={ row_two.id }
+													render={ ( { open } ) => (
+														<Button onClick={ open } className="button">
+															{ __( 'Select Image' ) }
+														</Button>
+													) }
+												/>
+											</CardBody>
+											<CardFooter>
+												<small>
+													Please choose your pictures from media library or upload new one.
+												</small>
+											</CardFooter>
+										</Card>
+									</div>
+								)
+							}
+						</div>
+					}
+					<div className="pageblock-about-us-staff" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gridGap: '1em' }}>
+						<div>
+							<Card>
+								<CardBody>
+									{ (staff_one.url != 0) ? (
+										<img src={ staff_one.url } alt={ staff_one.alt } /> 
+									) : (
 										<MediaUpload
 											onSelect={ ( media ) => {
 												setAttributes( {
-													row_one: {
-														...row_one,
+													staff_one: {
+														...staff_one,
 														id: media.id,
 														url: media.url,
 														alt: media.alt,
 													}
 												} );
-											}}
-											value={ row_one.id }
+											} }
+											value={ staff_one.id }
 											render={ ( { open } ) => (
 												<Button onClick={ open } className="button">
 													{ __( 'Select Image' ) }
 												</Button>
 											) }
 										/>
-									</div>
-								)
-							}
-							{ showRowOneText &&
-								<RichText
-									placeholder='...Write Content'
-									tagName="p"
-									value={ row_one.text }
-									onChange={ ( value ) => {
-										setAttributes( {
-											row_one: {
-												...row_one,
-												text: value,
-											}
-										} );
-									} }
-									style={{
-										color: row_one.color,
-										margin: '30% 15% 0% 15%',
-									}}
-								/>
-							}
-						</div>
-					}
-					{ showRowTwo &&
-						<div className="wp-block-themeisle-blocks-body__row-two" style={{ backgroundColor: row_two.back, display: 'grid', gridTemplateColumns: 'auto 60%', columnGap: '20px' }}>
-							{ showRowTwoText &&
-								<RichText
-									placeholder='...Write Content'
-									tagName="p"
-									value={ row_two.text }
-									onChange={ ( value ) => {
-										setAttributes( {
-											row_two: {
-												...row_two,
-												text: value,
-											}
-										} );
-									} }
-									style={{
-										color: row_two.color,
-										padding: '30% 15% 0% 15%',
-									}}
-								/>
-							}
-							{ showRowTwoImage &&
-								(row_two.url != 0) ? (
-									<div>
-										<img src={ row_two.url } alt={ row_two.alt } style={{ width: '100%'}} />
-										<Button onClick={ () => {
+									) }
+								</CardBody>
+								<CardFooter>
+									<RichText
+										placeholder='...Write Name'
+										tagName="b"
+										value={ staff_one.name }
+										onChange={ ( value ) => {
 											setAttributes( {
-												row_two: {
-													...row_two,
-													id: 0,
-													url: '',
-													alt: '',
+												staff_one: {
+													...staff_one,
+													name: value,
 												}
 											} );
-										}
-										} className="button button-primary" style={{ marginLeft: '5vh', marginTop: '1vh', marginBottom: '1vh' }} >
-											{ __( 'Remove Image' ) }
-										</Button>
+										} }
+										style={{
+											color: staff_one.color,
+										}}
+									/>
+								</CardFooter>
+							</Card>
+						</div>
+						<div>
+							<Card>
+								<CardBody>
+									{ (staff_two.url != 0) ? (
+										<img src={ staff_two.url } alt={ staff_two.alt } /> 
+									) : (
 										<MediaUpload
 											onSelect={ ( media ) => {
 												setAttributes( {
-													row_two: {
-														...row_two,
+													staff_two: {
+														...staff_two,
 														id: media.id,
 														url: media.url,
 														alt: media.alt,
 													}
 												} );
-											}}
-											value={ row_two.id }
+											} }
+											value={ staff_two.id }
 											render={ ( { open } ) => (
-												<Button onClick={ open } className="button" style={{ marginLeft: '5vh', marginTop: '1vh', marginBottom: '1vh' }}>
-													{ __( 'Change Image' ) }
-												</Button>
-											) }
-										/>
-									</div>
-								) : (
-									<div>
-										<MediaUpload
-											onSelect={ ( media ) => {
-												setAttributes( {
-													row_two: {
-														...row_two,
-														id: media.id,
-														url: media.url,
-														alt: media.alt,
-													}
-												} );
-											}}
-											value={ row_two.id }
-											render={ ( { open } ) => (
-												<Button onClick={ open } className="button" style={{ marginLeft: '5vh', marginTop: '5vh' }}>
+												<Button onClick={ open } className="button">
 													{ __( 'Select Image' ) }
 												</Button>
 											) }
 										/>
-									</div>
-								)
-							}
+									) }
+								</CardBody>
+								<CardFooter>
+									<RichText
+										placeholder='...Write Name'
+										tagName="b"
+										value={ staff_two.name }
+										onChange={ ( value ) => {
+											setAttributes( {
+												staff_two: {
+													...staff_two,
+													name: value,
+												}
+											} );
+										} }
+										style={{
+											color: staff_two.color,
+										}}
+									/>
+								</CardFooter>
+							</Card>
 						</div>
-					}
+						<div>
+							<Card>
+								<CardBody>
+									{ (staff_three.url != 0) ? (
+										<img src={ staff_three.url } alt={ staff_three.alt } /> 
+									) : (
+										<MediaUpload
+											onSelect={ ( media ) => {
+												setAttributes( {
+													staff_three: {
+														...staff_three,
+														id: media.id,
+														url: media.url,
+														alt: media.alt,
+													}
+												} );
+											} }
+											value={ staff_three.id }
+											render={ ( { open } ) => (
+												<Button onClick={ open } className="button">
+													{ __( 'Select Image' ) }
+												</Button>
+											) }
+										/>
+									) }
+								</CardBody>
+								<CardFooter>
+									<RichText
+										placeholder='...Write Name'
+										tagName="b"
+										value={ staff_three.name }
+										onChange={ ( value ) => {
+											setAttributes( {
+												staff_three: {
+													...staff_three,
+													name: value,
+												}
+											} );
+										} }
+										style={{
+											color: staff_three.color,
+										}}
+									/>
+								</CardFooter>
+							</Card>
+						</div>
+					</div>
 				</div>
 			}
 			<InspectorControls>
 				<Panel>
-					<PanelBody title={ __( 'Header Settings', 'themeisle-companion' ) } initialOpen={ false }>
-						<PanelBody title='Header Visibility Settings' initialOpen={ false }>
+					<PanelBody title={ __( 'Home Settings', 'themeisle-companion' ) } initialOpen={ false }>
+						<PanelBody title='Visibility Settings' initialOpen={ false }>
 							<ToggleControl
-								label={ __( 'Show Header', 'themeisle-companion' ) }
+								label={ __( 'Show Home', 'themeisle-companion' ) }
 								checked={ showHeader }
 								onChange={ ( value ) => {
 									setAttributes( {
@@ -295,45 +472,60 @@ export default function Edit( { attributes, setAttributes } ) {
 								} }
 							/>
 						</PanelBody>
-						<PanelBody title='Header Background' initialOpen={false}>
-							<MediaUpload
-								onSelect={ ( media ) => {
-									setAttributes( {
-										image: {
-											id: media.id,
-											url: media.url,
-											alt: media.alt,
-										}
-									} );
-								}}
-								value={ image.id }
-								render={ ( { open } ) => (
-									<Button onClick={ open } className="button">
-										{ __( 'Select Image' ) }
+						<PanelBody title='Home Background' initialOpen={false}>
+							<PanelBody title='Background Image' initialOpen={false}>
+								<MediaUpload
+									onSelect={ ( media ) => {
+										setAttributes( {
+											image: {
+												id: media.id,
+												url: media.url,
+												alt: media.alt,
+											}
+										} );
+									}}
+									value={ image.id }
+									render={ ( { open } ) => (
+										<Button onClick={ open } className="button">
+											{ __( 'Select Image' ) }
+										</Button>
+									) }
+								/><hr></hr>
+								{ image.id !=0 && 
+									<Button onClick={ () => {
+										setAttributes( {
+											image: {
+												id: 0,
+												url: '',
+												alt: '',
+											}
+										} );
+									}
+									} className="button button-primary">
+										{ __( 'Remove Image' ) }
 									</Button>
-								) }
-							/><hr></hr>
-							{ image.id !=0 && 
-								<Button onClick={ () => {
-									setAttributes( {
-										image: {
-											id: 0,
-											url: '',
-											alt: '',
-										}
-									} );
+								}<hr></hr>
+								{ image.url != '' &&
+									<div className="wp-block-themeisle-blocks-header__image">
+										<img src={ image.url } alt={ image.alt } />
+									</div>
 								}
-								} className="button button-primary">
-									{ __( 'Remove Image' ) }
-								</Button>
-							}<hr></hr>
-							{ image.url != '' &&
-								<div className="wp-block-themeisle-blocks-header__image">
-									<img src={ image.url } alt={ image.alt } />
-								</div>
-							}
+							</PanelBody>
+							<PanelBody title='Background Color' initialOpen={false}>
+								<ColorPalette
+									label={ __( 'Background Color' ) }
+									value={ image.color }
+									onChange={ ( value ) => {
+										setAttributes( {
+											image: {
+												color: value
+											}
+										} );
+									} }
+								/>
+							</PanelBody>
 						</PanelBody>
-						<PanelBody title='Header Title' initialOpen={ false }>
+						<PanelBody title='Home Title' initialOpen={ false }>
 							<ColorPalette
 								colors={[
 									{ name: 'Black', color: '#000' },
@@ -353,7 +545,7 @@ export default function Edit( { attributes, setAttributes } ) {
 								} }
 							/>
 						</PanelBody>
-						<PanelBody title='Header Subtitle' initialOpen={ false }>
+						<PanelBody title='Home Subtitle' initialOpen={ false }>
 							<ColorPalette
 								colors={[
 									{ name: 'Black', color: '#000' },
@@ -374,14 +566,14 @@ export default function Edit( { attributes, setAttributes } ) {
 							/>
 						</PanelBody>
 					</PanelBody>
-					<PanelBody title='Body Settings' initialOpen={ false }>
-						<PanelBody title='Row Visibility Settings' initialOpen={ false }>
+					<PanelBody title='About Us Settings' initialOpen={ false }>
+						<PanelBody title='Visibility Settings' initialOpen={ false }>
 							<ToggleControl
-								label={ __( 'Show Body', 'themeisle-companion' ) }
-								checked={ showRow }
+								label={ __( 'Show About Us', 'themeisle-companion' ) }
+								checked={ showAboutUs }
 								onChange={ ( value ) => {
 									setAttributes( {
-										showRow: value
+										showAboutUs: value
 									} );
 								} }
 							/>
@@ -415,10 +607,42 @@ export default function Edit( { attributes, setAttributes } ) {
 										} );
 									} }
 								/>
+
 								<hr></hr>
 								{ row_one.url != '' &&
 									<div className="wp-block-themeisle-blocks-body__image">
-										<img src={ row_one.url } alt={ row_one.alt } />
+										<img src={ row_one.url } alt={ row_one.alt } /><hr></hr>
+										<Button onClick={ () => {
+											setAttributes( {
+												row_one: {
+													...row_one,
+													id: 0,
+													url: '',
+													alt: ''
+												}
+											} );
+										}
+										} className="button button-primary">
+											{ __( 'Remove Image' ) }
+										</Button><hr></hr>
+										<MediaUpload
+											onSelect={ ( media ) => {
+												setAttributes( {
+													row_one: {
+														...row_one,
+														id: media.id,
+														url: media.url,
+														alt: media.alt
+													}
+												} );
+											} }
+											value={ row_one.id }
+											render={ ( { open } ) => (
+												<Button onClick={ open } className="button">
+													{ __( 'Change Image' ) }
+												</Button>
+											) }
+										/>
 									</div>
 								}
 							</PanelBody>
@@ -473,6 +697,38 @@ export default function Edit( { attributes, setAttributes } ) {
 								{ row_two.url != '' &&
 									<div className="wp-block-themeisle-blocks-body__image">
 										<img src={ row_two.url } alt={ row_two.alt } />
+										<hr></hr>
+										<Button onClick={ () => {
+											setAttributes( {
+												row_two: {
+													...row_two,
+													id: 0,
+													url: '',
+													alt: ''
+												}
+											} );
+										}
+										} className="button button-primary">
+											{ __( 'Remove Image' ) }
+										</Button><hr></hr>
+										<MediaUpload
+											onSelect={ ( media ) => {
+												setAttributes( {
+													row_two: {
+														...row_two,
+														id: media.id,
+														url: media.url,
+														alt: media.alt
+													}
+												} );
+											} }
+											value={ row_two.id }
+											render={ ( { open } ) => (
+												<Button onClick={ open } className="button">
+													{ __( 'Change Image' ) }
+												</Button>
+											) }
+										/>
 									</div>
 								}
 							</PanelBody>
@@ -511,6 +767,8 @@ export default function Edit( { attributes, setAttributes } ) {
 									} }
 								/>
 							</PanelBody>
+						</PanelBody>
+						<PanelBody title='Staff Settings' initialOpen={false}>
 						</PanelBody>
 					</PanelBody>
 				</Panel>
