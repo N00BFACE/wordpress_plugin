@@ -1,6 +1,5 @@
 import { useBlockProps } from '@wordpress/block-editor';
 import { RichText } from '@wordpress/block-editor';
-import { Card, CardBody, CardFooter } from '@wordpress/components';
 
 export default function save( { attributes } ) {
 	const {
@@ -8,7 +7,7 @@ export default function save( { attributes } ) {
 		showTitle, showSubtitle, showHeader, showImage,
 		row_one, showRowOne, showRowOneImage, showRowOneSubtitle, showRowOneTitle, showRowOneText,
 		row_two, showRowTwo, showRowTwoImage, showRowTwoSubtitle, showRowTwoTitle, showRowTwoText,
-		showAboutUs, staff_one, staff_two, staff_three,
+		showAboutUs,
 	} = attributes;
 	return (
 		<div { ...useBlockProps.save() } style={{ maxWidth: '840px', margin: '0 auto' }} >
@@ -55,7 +54,7 @@ export default function save( { attributes } ) {
 					{ showRowOne &&
 						<div className="pageblock-about-us_row-one" style={{ backgroundColor: row_one.back, display: 'grid', gridTemplateColumns: '50% auto', columnGap: '20px', padding: '25px' }} >
 							{ showRowOneImage &&
-								<div style={{ display: 'flex' }}>
+								<div>
 									<img src={ row_one.url } alt={ row_one.alt } style={{ width: '100%'}} />
 								</div>
 							}
@@ -86,44 +85,12 @@ export default function save( { attributes } ) {
 								}
 							</div>
 							{ showRowTwoImage &&
-								<div style={{ display: 'flex' }}>
+								<div>
 									<img src={ row_two.url } alt={ row_two.alt } style={{ width: '100%'}} />
 								</div>
 							}
 						</div>
 					}
-					{/* <div className="pageblock-about-us-staff" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gridGap: '1em' }}>
-						<div>
-							<Card>
-								<CardBody>
-									<img src={ staff_one.url } alt={ staff_one.alt } style={{ width: '100%'}} />
-								</CardBody>
-								<CardFooter>
-									<RichText.Content tagName="b" value={(staff_one.name)} style={{ color: staff_one.color, }} />
-								</CardFooter>
-							</Card>
-						</div>
-						<div>
-							<Card>
-								<CardBody>
-									<img src={ staff_two.url } alt={ staff_two.alt } style={{ width: '100%'}} />
-								</CardBody>
-								<CardFooter>
-									<RichText.Content tagName="b" value={(staff_two.name)} style={{ color: staff_two.color, }} />
-								</CardFooter>
-							</Card>
-						</div>
-						<div>
-							<Card>
-								<CardBody>
-									<img src={ staff_three.url } alt={ staff_three.alt } style={{ width: '100%'}} />
-								</CardBody>
-								<CardFooter>
-									<RichText.Content tagName="b" value={(staff_three.name)} style={{ color: staff_three.color, }} />
-								</CardFooter>
-							</Card>
-						</div>
-					</div> */}
 				</div>
 			}
 		</div>

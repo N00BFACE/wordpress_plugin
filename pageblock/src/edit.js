@@ -1,7 +1,7 @@
 import { __ } from '@wordpress/i18n';
 import { useBlockProps } from '@wordpress/block-editor';
 import { RichText, InspectorControls, MediaUpload, BlockControls, AlignmentToolbar } from '@wordpress/block-editor';
-import { Panel, PanelBody, Button, ToggleControl, ColorPalette, Card, CardHeader, CardBody, CardFooter } from '@wordpress/components';
+import { Panel, PanelBody, Button, ToggleControl, ColorPalette, Card, CardHeader, CardBody, CardFooter, RangeControl } from '@wordpress/components';
 
 export default function Edit( { attributes, setAttributes } ) {
 	const {
@@ -9,8 +9,8 @@ export default function Edit( { attributes, setAttributes } ) {
 		showHeader, showTitle, showSubtitle, showImage,
 		row_one, showRowOne, showRowOneImage, showRowOneSubtitle, showRowOneTitle, showRowOneText,
 		row_two, showRowTwo, showRowTwoImage, showRowTwoText,
-		showAboutUs, staff_one, staff_two, staff_three,
-	} = attributes; 	
+		showAboutUs, showStaff, staff,
+	} = attributes;
 	return (
 		<div { ...useBlockProps() }>
 			{ showHeader && 
@@ -289,146 +289,10 @@ export default function Edit( { attributes, setAttributes } ) {
 							}
 						</div>
 					}
-					<div className="pageblock-about-us-staff" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gridGap: '1em' }}>
-						<div>
-							<Card>
-								<CardBody>
-									{ (staff_one.url != 0) ? (
-										<img src={ staff_one.url } alt={ staff_one.alt } /> 
-									) : (
-										<MediaUpload
-											onSelect={ ( media ) => {
-												setAttributes( {
-													staff_one: {
-														...staff_one,
-														id: media.id,
-														url: media.url,
-														alt: media.alt,
-													}
-												} );
-											} }
-											value={ staff_one.id }
-											render={ ( { open } ) => (
-												<Button onClick={ open } className="button">
-													{ __( 'Select Image' ) }
-												</Button>
-											) }
-										/>
-									) }
-								</CardBody>
-								<CardFooter>
-									<RichText
-										placeholder='...Write Name'
-										tagName="b"
-										value={ staff_one.name }
-										onChange={ ( value ) => {
-											setAttributes( {
-												staff_one: {
-													...staff_one,
-													name: value,
-												}
-											} );
-										} }
-										style={{
-											color: staff_one.color,
-										}}
-									/>
-								</CardFooter>
-							</Card>
+					{ showStaff &&
+						<div className="staff">
 						</div>
-						<div>
-							<Card>
-								<CardBody>
-									{ (staff_two.url != 0) ? (
-										<img src={ staff_two.url } alt={ staff_two.alt } /> 
-									) : (
-										<MediaUpload
-											onSelect={ ( media ) => {
-												setAttributes( {
-													staff_two: {
-														...staff_two,
-														id: media.id,
-														url: media.url,
-														alt: media.alt,
-													}
-												} );
-											} }
-											value={ staff_two.id }
-											render={ ( { open } ) => (
-												<Button onClick={ open } className="button">
-													{ __( 'Select Image' ) }
-												</Button>
-											) }
-										/>
-									) }
-								</CardBody>
-								<CardFooter>
-									<RichText
-										placeholder='...Write Name'
-										tagName="b"
-										value={ staff_two.name }
-										onChange={ ( value ) => {
-											setAttributes( {
-												staff_two: {
-													...staff_two,
-													name: value,
-												}
-											} );
-										} }
-										style={{
-											color: staff_two.color,
-										}}
-									/>
-								</CardFooter>
-							</Card>
-						</div>
-						<div>
-							<Card>
-								<CardBody>
-									{ (staff_three.url != 0) ? (
-										<img src={ staff_three.url } alt={ staff_three.alt } /> 
-									) : (
-										<MediaUpload
-											onSelect={ ( media ) => {
-												setAttributes( {
-													staff_three: {
-														...staff_three,
-														id: media.id,
-														url: media.url,
-														alt: media.alt,
-													}
-												} );
-											} }
-											value={ staff_three.id }
-											render={ ( { open } ) => (
-												<Button onClick={ open } className="button">
-													{ __( 'Select Image' ) }
-												</Button>
-											) }
-										/>
-									) }
-								</CardBody>
-								<CardFooter>
-									<RichText
-										placeholder='...Write Name'
-										tagName="b"
-										value={ staff_three.name }
-										onChange={ ( value ) => {
-											setAttributes( {
-												staff_three: {
-													...staff_three,
-													name: value,
-												}
-											} );
-										} }
-										style={{
-											color: staff_three.color,
-										}}
-									/>
-								</CardFooter>
-							</Card>
-						</div>
-					</div>
+					}
 				</div>
 			}
 			<InspectorControls>
@@ -592,6 +456,15 @@ export default function Edit( { attributes, setAttributes } ) {
 								onChange={ ( value ) => {
 									setAttributes( {
 										showRowTwo: value
+									} );
+								} }
+							/>
+							<ToggleControl
+								label={ __( 'Show Staff', 'themeisle-companion' ) }
+								checked={ showStaff }
+								onChange={ ( value ) => {
+									setAttributes( {
+										showStaff: value
 									} );
 								} }
 							/>
@@ -768,7 +641,22 @@ export default function Edit( { attributes, setAttributes } ) {
 								/>
 							</PanelBody>
 						</PanelBody>
-						<PanelBody title='Staff Settings' initialOpen={false}>
+						<PanelBody title="Staff Settings" initialOpen={false}>
+							<RangeControl
+								label={ __( 'Number of Staff', 'themeisle-companion' ) }
+								value={ staff }
+								onChange={ ( value ) => {
+									setAttributes( {
+										staff: {
+											...staff,
+											number: value
+										}
+									} );
+								} }
+								min={ 1 }
+								max={ 10 }
+								step={ 1 }
+							/>
 						</PanelBody>
 					</PanelBody>
 				</Panel>
@@ -776,3 +664,4 @@ export default function Edit( { attributes, setAttributes } ) {
 		</div>
 	);
 }
+

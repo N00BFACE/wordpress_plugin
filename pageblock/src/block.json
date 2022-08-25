@@ -129,44 +129,24 @@
 			"type": "boolean",
 			"default": true
 		},
-		"staff_one": {
-			"type": "object",
+		"staff": {
+			"type": "array",
 			"default": {
 				"name": "",
 				"position": "",
-				"selector": ".staff-one",
-				"back": "",
-				"color": "",
-				"url": "",
+				"email": "",
+				"description": "",
+				"since": "",
 				"id": "",
-				"alt": ""
+				"url": "",
+				"alt": "",
+				"number": 1,
+				"selector": ".staff"
 			}
 		},
-		"staff_two": {
-			"type": "object",
-			"default": {
-				"name": "",
-				"position": "",
-				"selector": ".staff-two",
-				"back": "",
-				"color": "",
-				"url": "",
-				"id": "",
-				"alt": ""
-			}
-		},
-		"staff_three": {
-			"type": "object",
-			"default": {
-				"name": "",
-				"position": "",
-				"selector": ".staff-three",
-				"back": "",
-				"color": "",
-				"url": "",
-				"id": "",
-				"alt": ""
-			}
+		"showStaff": {
+			"type": "boolean",
+			"default": true
 		}
 	},
 	"textdomain": "pageblock",
