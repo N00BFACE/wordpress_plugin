@@ -2,6 +2,8 @@ import { __ } from '@wordpress/i18n';
 import { useBlockProps } from '@wordpress/block-editor';
 import { RichText, InspectorControls, MediaUpload, BlockControls, AlignmentToolbar } from '@wordpress/block-editor';
 import { Panel, PanelBody, Button, ToggleControl, ColorPalette, Card, CardHeader, CardBody, CardFooter, RangeControl } from '@wordpress/components';
+import apiFetch from '@wordpress/api-fetch';
+import { useState, useEffect } from '@wordpress/element';
 
 export default function Edit( { attributes, setAttributes } ) {
 	const {
@@ -11,8 +13,26 @@ export default function Edit( { attributes, setAttributes } ) {
 		row_two, showRowTwo, showRowTwoImage, showRowTwoText,
 		showAboutUs, showStaff, staff,
 	} = attributes;
+
+	function staffList() {
+		apiFetch( { path: '/pageblock/v1/staff_table' } ).then( ( data ) => {
+			setAttributes( { staff: data } );
+			console.log( staff );
+		} )
+	}
+
+	useEffect( () => {
+		staffList();
+	} );
+
 	return (
 		<div { ...useBlockProps() }>
+			{ staff.map( ( staff ) => {
+				<div>
+					{ staff.name }
+				</div>
+			} ) }
+
 			{ showHeader && 
 				<div className="pageblock-home" 
 					style={{
@@ -297,10 +317,10 @@ export default function Edit( { attributes, setAttributes } ) {
 			}
 			<InspectorControls>
 				<Panel>
-					<PanelBody title={ __( 'Home Settings', 'themeisle-companion' ) } initialOpen={ false }>
+					<PanelBody title={ __( 'Home Settings' ) } initialOpen={ false }>
 						<PanelBody title='Visibility Settings' initialOpen={ false }>
 							<ToggleControl
-								label={ __( 'Show Home', 'themeisle-companion' ) }
+								label={ __( 'Show Home' ) }
 								checked={ showHeader }
 								onChange={ ( value ) => {
 									setAttributes( {
@@ -309,7 +329,7 @@ export default function Edit( { attributes, setAttributes } ) {
 								} }
 							/>
 							<ToggleControl
-								label={ __( 'Show Title', 'themeisle-companion' ) }
+								label={ __( 'Show Title' ) }
 								checked={ showTitle }
 								onChange={ ( value ) => {
 									setAttributes( {
@@ -318,7 +338,7 @@ export default function Edit( { attributes, setAttributes } ) {
 								} }
 							/>
 							<ToggleControl
-								label={ __( 'Show Subtitle', 'themeisle-companion' ) }
+								label={ __( 'Show Subtitle' ) }
 								checked={ showSubtitle }
 								onChange={ ( value ) => {
 									setAttributes( {
@@ -327,7 +347,7 @@ export default function Edit( { attributes, setAttributes } ) {
 								} }
 							/>
 							<ToggleControl
-								label={ __( 'Show Background Image', 'themeisle-companion' ) }
+								label={ __( 'Show Background Image' ) }
 								checked={ showImage }
 								onChange={ ( value ) => {
 									setAttributes( {
@@ -433,7 +453,7 @@ export default function Edit( { attributes, setAttributes } ) {
 					<PanelBody title='About Us Settings' initialOpen={ false }>
 						<PanelBody title='Visibility Settings' initialOpen={ false }>
 							<ToggleControl
-								label={ __( 'Show About Us', 'themeisle-companion' ) }
+								label={ __( 'Show About Us' ) }
 								checked={ showAboutUs }
 								onChange={ ( value ) => {
 									setAttributes( {
@@ -442,7 +462,7 @@ export default function Edit( { attributes, setAttributes } ) {
 								} }
 							/>
 							<ToggleControl
-								label={ __( 'Show Row One', 'themeisle-companion' ) }
+								label={ __( 'Show Row One' ) }
 								checked={ showRowOne }
 								onChange={ ( value ) => {
 									setAttributes( {
@@ -451,7 +471,7 @@ export default function Edit( { attributes, setAttributes } ) {
 								} }
 							/>
 							<ToggleControl
-								label={ __( 'Show Row Two', 'themeisle-companion' ) }
+								label={ __( 'Show Row Two' ) }
 								checked={ showRowTwo }
 								onChange={ ( value ) => {
 									setAttributes( {
@@ -460,7 +480,7 @@ export default function Edit( { attributes, setAttributes } ) {
 								} }
 							/>
 							<ToggleControl
-								label={ __( 'Show Staff', 'themeisle-companion' ) }
+								label={ __( 'Show Staff' ) }
 								checked={ showStaff }
 								onChange={ ( value ) => {
 									setAttributes( {
@@ -472,7 +492,7 @@ export default function Edit( { attributes, setAttributes } ) {
 						<PanelBody title='Row One Settings' initialOpen={false}>
 							<PanelBody title='Image Settings' initialOpen={false}>
 								<ToggleControl
-									label={ __( 'Show Image', 'themeisle-companion' ) }
+									label={ __( 'Show Image' ) }
 									checked={ showRowOneImage }
 									onChange={ ( value ) => {
 										setAttributes( {
@@ -521,7 +541,7 @@ export default function Edit( { attributes, setAttributes } ) {
 							</PanelBody>
 							<PanelBody title='Text Settings' initialOpen={false}>
 								<ToggleControl
-									label={ __( 'Show Text', 'themeisle-companion' ) }
+									label={ __( 'Show Text' ) }
 									checked={ showRowOneText }
 									onChange={ ( value ) => {
 										setAttributes( {
@@ -558,7 +578,7 @@ export default function Edit( { attributes, setAttributes } ) {
 						<PanelBody title='Row Two Settings' initialOpen={false}>
 							<PanelBody title='Image Settings' initialOpen={false}>
 								<ToggleControl
-									label={ __( 'Show Image', 'themeisle-companion' ) }
+									label={ __( 'Show Image' ) }
 									checked={ showRowTwoImage }
 									onChange={ ( value ) => {
 										setAttributes( {
@@ -607,7 +627,7 @@ export default function Edit( { attributes, setAttributes } ) {
 							</PanelBody>
 							<PanelBody title='Text Settings' initialOpen={false}>
 								<ToggleControl
-									label={ __( 'Show Text', 'themeisle-companion' ) }
+									label={ __( 'Show Text' ) }
 									checked={ showRowTwoText }
 									onChange={ ( value ) => {
 										setAttributes( {
@@ -643,7 +663,7 @@ export default function Edit( { attributes, setAttributes } ) {
 						</PanelBody>
 						<PanelBody title="Staff Settings" initialOpen={false}>
 							<RangeControl
-								label={ __( 'Number of Staff', 'themeisle-companion' ) }
+								label={ __( 'Number of Staff' ) }
 								value={ staff }
 								onChange={ ( value ) => {
 									setAttributes( {

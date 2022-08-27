@@ -21,26 +21,43 @@
  * @see https://developer.wordpress.org/reference/functions/register_block_type/
  */
 function create_block_pageblock_block_init() {
-	register_block_type( __DIR__ . '/build' );
+	register_block_type( __DIR__ . '/build',
+		array(
+			'render_callback' => "pageblock_render_callback",
+		)
+	);
 }
-
 add_action( 'init', 'create_block_pageblock_block_init' );
 
-add_action( 'admin_menu', 'pageblock_menu' );
-add_action( 'admin_menu', 'staff_menu_page' );
-add_action( 'admin_menu', 'features_menu_page' );
+function pageblock_render_callback($attributes, $content) {
+	$staffs = get_posts(
+		[
+			'staff' => $attributes['staff'],
+		]
+	);
+	global $wpdb;
+	$table_name = $wpdb->prefix . 'staff_table';
+	$staff = $wpdb->get_results("SELECT * FROM $table_name");
+	$staff_html = '';
+	$staff_html .= '<div class="staff-list">';
+	$staff_html .= '<h2>Staff</h2>';
+	$staff_html .= '<ul>';
+	foreach ($staff as $person) {
+		$staff_html .= '<li>';
+		$staff_html .= '<img src="' . $person->image . '" />';
+		$staff_html .= '<h3>' . $person->name . '</h3>';
+		$staff_html .= '<p>' . $person->title . '</p>';
+		$staff_html .= '</li>';
+	}
+	$staff_html .= '</ul>';
+	$staff_html .= '</div>';
+	return $staff_html;
+}
 
 function pageblock_menu() {
 	add_menu_page( 'Pageblock', 'Pageblock', 'manage_options', 'pageblock', 'pageblock_settings_page', 'dashicons-admin-page');
 }
-
-function staff_menu_page() {
-	add_submenu_page( 'pageblock', 'Staff', 'Staff', 'manage_options', 'staff', 'staff_settings_page' );
-}
-
-function features_menu_page() {
-	add_submenu_page( 'pageblock', 'Features', 'Features', 'manage_options', 'features', 'features_settings_page' );
-}
+add_action( 'admin_menu', 'pageblock_menu' );
 
 function pageblock_settings_page() {
 	if ( ! current_user_can( 'manage_options' ) ) {
@@ -50,6 +67,11 @@ function pageblock_settings_page() {
 	<h1>Pageblock Settings</h1>
 	<?php
 }
+
+function staff_menu_page() {
+	add_submenu_page( 'pageblock', 'Staff', 'Staff', 'manage_options', 'staff', 'staff_settings_page' );
+}
+add_action( 'admin_menu', 'staff_menu_page' );
 
 function staff_settings_page() {
 	if ( ! current_user_can( 'manage_options' ) ) {
@@ -127,63 +149,6 @@ function staff_settings_page() {
 	<?php
 }
 
-function features_settings_page() {
-	if ( ! current_user_can( 'manage_options' ) ) {
-		return;
-	}
-	?>
-	<h1>Features Settings</h1>
-	<div>
-		<div class="add_feature">
-			<h4>Add New Feature</h4>
-			<form method="post" class="form">
-				<?php settings_fields( 'pageblock_settings_group' ); ?>
-				<?php do_settings_sections( 'pageblock_settings_group' ); ?>
-				<table class="card">
-					<tr>
-						<th>Feature</th>
-						<td><input type="text" name="feature" value="<?php echo esc_attr( get_option('feature') ); ?>" /></td>
-					</tr>
-					<tr>
-						<th>Description</th>
-						<td><input type="text" name="description" value="<?php echo esc_attr( get_option('description') ); ?>" /></td>
-					</tr>
-				</table>
-				<?php submit_button('Add Feature'); ?>
-			</form>
-		</div>
-		<div class="feature_list">
-			<h3>Feature List</h3>
-			<table class="wp-list-table widefat fixed striped pages">
-				<thead>
-					<tr>
-						<th>Feature</th>
-						<th>Description</th>
-						<th>Edit / View</th>
-						<th>Delete</th>
-					</tr>
-				</thead>
-				<tbody>
-					<?php
-						global $wpdb;
-						$table_name = $wpdb->prefix . 'feature_table';
-						$results = $wpdb->get_results( "SELECT * FROM $table_name" );
-						foreach ( $results as $result ) {
-							echo '<tr>';
-							echo '<td>' . $result->feature . '</td>';
-							echo '<td>' . $result->description . '</td>';
-							echo '<td><a href="?page=pageblock&edit=' . $result->id . '">Edit</a> / <a href="?page=pageblock&view=' . $result->id . '">View</a></td>';
-							echo '<td><a href="?page=pageblock&delete=' . $result->id . '">Delete</a></td>';
-							echo '</tr>';
-						}
-					?>
-				</tbody>
-			</table>
-		</div>
-	</div>
-	<?php
-}
-
 function wp_insert_data() {
 	global $wpdb;
 	$table_name = $wpdb->prefix . 'staff_table';
@@ -191,7 +156,7 @@ function wp_insert_data() {
 		$wpdb->insert( 
 			$table_name, 
 			array( 
-				'staff_name' => $_POST['fullname'], 
+				'name' => $_POST['fullname'], 
 				'position' => $_POST['position'], 
 				'email' => $_POST['email'], 
 				'image' => $_POST['image'], 
@@ -202,3 +167,18 @@ function wp_insert_data() {
 	};
 }
 add_action( 'admin_init', 'wp_insert_data' );
+
+function staff_api_init() {
+	register_rest_route( 'pageblock/v1', '/staff_table', array(
+		'methods' => 'GET',
+		'callback' => 'staff_table_api_handler'
+	) );
+}
+add_action( 'rest_api_init', 'staff_api_init' );
+
+function staff_table_api_handler() {
+	global $wpdb;
+	$table_name = $wpdb->prefix . 'staff_table';
+	$results = $wpdb->get_results( "SELECT * FROM $table_name" );
+	return $results;
+}

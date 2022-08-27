@@ -7,7 +7,7 @@ function wp_table_create() {
 
     $wp_query="CREATE TABLE $table_name (
         id mediumint(9) NOT NULL AUTO_INCREMENT,
-        staff_name varchar(55) NOT NULL,
+        name varchar(55) NOT NULL,
         position tinytext NOT NULL,
         email varchar(55) NOT NULL,
         image varchar(55) NOT NULL,
