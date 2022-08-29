@@ -20,42 +20,22 @@
  *
  * @see https://developer.wordpress.org/reference/functions/register_block_type/
  */
+
 function create_block_pageblock_block_init() {
-	register_block_type( __DIR__ . '/build',
-		array(
-			'render_callback' => "pageblock_render_callback",
-		)
-	);
+	register_block_type( __DIR__ . '/build' );
 }
 add_action( 'init', 'create_block_pageblock_block_init' );
 
-function pageblock_render_callback($attributes, $content) {
-	$staffs = get_posts(
-		[
-			'staff' => $attributes['staff'],
-		]
-	);
-	global $wpdb;
-	$table_name = $wpdb->prefix . 'staff_table';
-	$staff = $wpdb->get_results("SELECT * FROM $table_name");
-	$staff_html = '';
-	$staff_html .= '<div class="staff-list">';
-	$staff_html .= '<h2>Staff</h2>';
-	$staff_html .= '<ul>';
-	foreach ($staff as $person) {
-		$staff_html .= '<li>';
-		$staff_html .= '<img src="' . $person->image . '" />';
-		$staff_html .= '<h3>' . $person->name . '</h3>';
-		$staff_html .= '<p>' . $person->title . '</p>';
-		$staff_html .= '</li>';
-	}
-	$staff_html .= '</ul>';
-	$staff_html .= '</div>';
-	return $staff_html;
-}
 
 function pageblock_menu() {
-	add_menu_page( 'Pageblock', 'Pageblock', 'manage_options', 'pageblock', 'pageblock_settings_page', 'dashicons-admin-page');
+	add_menu_page( 
+		'Pageblock', 
+		'Pageblock', 
+		'manage_options', 
+		'pageblock', 
+		'pageblock_settings_page', 
+		'dashicons-admin-page'
+	);
 }
 add_action( 'admin_menu', 'pageblock_menu' );
 
@@ -83,33 +63,51 @@ function staff_settings_page() {
 		<div>
 			<div class="add_staff">
 				<h4>Add New Staff</h4>
-				<form method="post" class="form">
+				<form method="post">
 					<?php settings_fields( 'pageblock_settings_group' ); ?>
 					<?php do_settings_sections( 'pageblock_settings_group' ); ?>
-					<table class="card">
-						<tr>
+					<table>
+						<style>
+							tr {
+								border-bottom: 1px solid #eee;
+							}
+							th {
+								padding: 10px;
+							}
+							td {
+								padding: 10px;
+							}
+							td input {
+								width: 100%;
+							}
+							td textarea {
+								width: 100%;
+								height: 100px;
+							}
+						</style>
+						<tr class="card">
 							<th>Full Name</th>
-							<td><input type="text" name="fullname" value="<?php echo esc_attr( get_option('fullname') ); ?>" /></td>
+							<td><input type="text" name="fullname" placeholder="Staff Name" value="<?php echo esc_attr( get_option('fullname') ); ?>" required /></td>
 						</tr>
-						<tr>
+						<tr class="card">
 							<th>Position</th>
-							<td><input type="text" name="position" value="<?php echo esc_attr( get_option('position') ); ?>" /></td>
+							<td><input type="text" name="position" placeholder="Staff Position" value="<?php echo esc_attr( get_option('position') ); ?>" required /></td>
 						</tr>
-						<tr>
+						<tr class="card">
 							<th>Email</th>
-							<td><input type="email" name="email" value="<?php echo esc_attr( get_option('email') ); ?>" /></td>
+							<td><input type="email" name="email" placeholder="Staff Email" value="<?php echo esc_attr( get_option('email') ); ?>" required /></td>
 						</tr>
-						<tr>
+						<tr class="card">
 							<th>Image</th>
-							<td><input type="file" name="image" value="<?php echo esc_attr( get_option('image') ); ?>" /></td>
+							<td><input type="file" name="image" placeholder="Staff Image" value="<?php echo esc_attr( get_option('image') ); ?>" required accept="image/png, image/jpeg" /></td>
 						</tr>
-						<tr>
+						<tr class="card">
 							<th>Description</th>
-							<td><input type="text" name="description" value="<?php echo esc_attr( get_option('description') ); ?>" /></td>
+							<td><textarea name="description" placeholder="Staff Description" value="<?php echo esc_attr( get_option('description') ); ?>" required ></textarea></td>
 						</tr>
-						<tr>
+						<tr class="card">
 							<th>Since</th>
-							<td><input type="date" name="since" value="<?php echo esc_attr( get_option('since') ); ?>" /></td>
+							<td><input type="date" name="since" value="<?php echo esc_attr( get_option('since') ); ?>" required /></td>
 						</tr>
 					</table>
 					<?php submit_button('Add Staff'); ?>
@@ -134,7 +132,7 @@ function staff_settings_page() {
 							$results = $wpdb->get_results( "SELECT * FROM $table_name" );
 							foreach ( $results as $result ) {
 								echo '<tr>';
-								echo '<td>' . $result->staff_name . '</td>';
+								echo '<td>' . $result->name . '</td>';
 								echo '<td>' . $result->position . '</td>';
 								echo '<td>' . $result->email . '</td>';
 								echo '<td><a href="?page=pageblock&edit=' . $result->id . '">Edit</a> / <a href="?page=pageblock&view=' . $result->id . '">View</a></td>';
@@ -149,6 +147,8 @@ function staff_settings_page() {
 	<?php
 }
 
+require_once( plugin_dir_path( __FILE__ ) . 'wp_staff_table.php' );
+
 function wp_insert_data() {
 	global $wpdb;
 	$table_name = $wpdb->prefix . 'staff_table';
@@ -159,14 +159,36 @@ function wp_insert_data() {
 				'name' => $_POST['fullname'], 
 				'position' => $_POST['position'], 
 				'email' => $_POST['email'], 
-				'image' => $_POST['image'], 
+				'image' => $_POST['image'],
 				'description' => $_POST['description'] ,
-				'since' => $_POST['since']
+				'since' => $_POST['since'],
 			)
 		);
+		$upload_dir = wp_upload_dir();
+		$image_data = file_get_contents($_FILES['image']['tmp_name']);
+		$filename = basename($_FILES['image']['name']);
+		if(wp_mkdir_p($upload_dir['path'])) {
+			$file = $upload_dir['path'] . '/' . $filename;
+		} else {
+			$file = $upload_dir['basedir'] . '/' . $filename;
+		}
+		file_put_contents($file, $image_data);
+
 	};
 }
 add_action( 'admin_init', 'wp_insert_data' );
+
+function wp_delete_data() {
+	global $wpdb;
+	$table_name = $wpdb->prefix . 'staff_table';
+	if(isset($_GET['delete'])) {
+		$id = $_GET['delete'];
+		$wpdb->delete( $table_name, array( 'id' => $id ) );
+	}
+}
+
+add_action( 'admin_init', 'wp_delete_data' );
+
 
 function staff_api_init() {
 	register_rest_route( 'pageblock/v1', '/staff_table', array(

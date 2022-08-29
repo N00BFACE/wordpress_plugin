@@ -1,9 +1,11 @@
 import { __ } from '@wordpress/i18n';
 import { useBlockProps } from '@wordpress/block-editor';
 import { RichText, InspectorControls, MediaUpload, BlockControls, AlignmentToolbar } from '@wordpress/block-editor';
-import { Panel, PanelBody, Button, ToggleControl, ColorPalette, Card, CardHeader, CardBody, CardFooter, RangeControl } from '@wordpress/components';
+import { Panel, PanelBody, Button, ToggleControl, ColorPalette, Card, CardHeader, CardBody, CardFooter } from '@wordpress/components';
 import apiFetch from '@wordpress/api-fetch';
-import { useState, useEffect } from '@wordpress/element';
+import { useEffect } from '@wordpress/element';
+import { InputNumber } from 'antd';
+import React from 'react';
 
 export default function Edit( { attributes, setAttributes } ) {
 	const {
@@ -16,8 +18,7 @@ export default function Edit( { attributes, setAttributes } ) {
 
 	function staffList() {
 		apiFetch( { path: '/pageblock/v1/staff_table' } ).then( ( data ) => {
-			setAttributes( { staff: data } );
-			console.log( staff );
+			setAttributes( { staff: data} )
 		} )
 	}
 
@@ -27,11 +28,22 @@ export default function Edit( { attributes, setAttributes } ) {
 
 	return (
 		<div { ...useBlockProps() }>
-			{ staff.map( ( staff ) => {
-				<div>
-					{ staff.name }
+			{/* { staff.map( ( staffMember, index ) => {
+				if ( index < staff.length ) {
+					return (
+						<div className="staff-member">
+							<img src={ staffMember.image } alt={ staffMember.name } />
+							<h3>{ staffMember.name }</h3>
+							<p>{ staffMember.position }</p>
+						</div>
+					);
+				}
+			} ) } */}
+			{/* { staff.map( ( staff ) => {
+				return <div>
+					{ staff.email }
 				</div>
-			} ) }
+			} ) } */}
 
 			{ showHeader && 
 				<div className="pageblock-home" 
@@ -310,8 +322,20 @@ export default function Edit( { attributes, setAttributes } ) {
 						</div>
 					}
 					{ showStaff &&
-						<div className="staff">
-						</div>
+					
+					<div className="staff">
+						{ staff.map( ( staffMember, index ) => {
+							if ( index < staff.length ) {
+								return (
+									<div className="staff-member">
+										<img src={ staffMember.image } alt={ staffMember.name } />
+										<h3>{ staffMember.name }</h3>
+										<p>{ staffMember.position }</p>
+									</div>
+								);
+							}
+						} ) }
+					</div>
 					}
 				</div>
 			}
@@ -662,21 +686,7 @@ export default function Edit( { attributes, setAttributes } ) {
 							</PanelBody>
 						</PanelBody>
 						<PanelBody title="Staff Settings" initialOpen={false}>
-							<RangeControl
-								label={ __( 'Number of Staff' ) }
-								value={ staff }
-								onChange={ ( value ) => {
-									setAttributes( {
-										staff: {
-											...staff,
-											number: value
-										}
-									} );
-								} }
-								min={ 1 }
-								max={ 10 }
-								step={ 1 }
-							/>
+							
 						</PanelBody>
 					</PanelBody>
 				</Panel>
