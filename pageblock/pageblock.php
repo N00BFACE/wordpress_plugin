@@ -34,7 +34,8 @@ function pageblock_menu() {
 		'manage_options', 
 		'pageblock', 
 		'pageblock_settings_page', 
-		'dashicons-admin-page'
+		'dashicons-admin-generic',
+		'20.1'
 	);
 }
 add_action( 'admin_menu', 'pageblock_menu' );
@@ -68,9 +69,6 @@ function staff_settings_page() {
 					<?php do_settings_sections( 'pageblock_settings_group' ); ?>
 					<table>
 						<style>
-							tr {
-								border-bottom: 1px solid #eee;
-							}
 							th {
 								padding: 10px;
 							}
@@ -118,6 +116,7 @@ function staff_settings_page() {
 				<table class="wp-list-table widefat fixed striped pages">
 					<thead>
 						<tr>
+							<th>S.N.</th>
 							<th>Name</th>
 							<th>Position</th>
 							<th>Email</th>
@@ -130,8 +129,10 @@ function staff_settings_page() {
 							global $wpdb;
 							$table_name = $wpdb->prefix . 'staff_table';
 							$results = $wpdb->get_results( "SELECT * FROM $table_name" );
+							$i = 1;
 							foreach ( $results as $result ) {
 								echo '<tr>';
+								echo '<td>' . $i++ . '</td>';
 								echo '<td>' . $result->name . '</td>';
 								echo '<td>' . $result->position . '</td>';
 								echo '<td>' . $result->email . '</td>';
@@ -149,6 +150,17 @@ function staff_settings_page() {
 
 require_once( plugin_dir_path( __FILE__ ) . 'wp_staff_table.php' );
 
+function contact_form_menu_page() {
+	add_submenu_page( 'pageblock', 'Contact Form', 'Contact Form', 'manage_options', 'contact_form', 'contact_form_settings_page' );
+}
+add_action( 'admin_menu', 'contact_form_menu_page' );
+
+function contact_form_settings_page() {
+	?>
+	<h1>Hello Nice Day For Fishin Aint It?</h1>
+	<?php
+}
+
 function wp_insert_data() {
 	global $wpdb;
 	$table_name = $wpdb->prefix . 'staff_table';
@@ -164,31 +176,9 @@ function wp_insert_data() {
 				'since' => $_POST['since'],
 			)
 		);
-		$upload_dir = wp_upload_dir();
-		$image_data = file_get_contents($_FILES['image']['tmp_name']);
-		$filename = basename($_FILES['image']['name']);
-		if(wp_mkdir_p($upload_dir['path'])) {
-			$file = $upload_dir['path'] . '/' . $filename;
-		} else {
-			$file = $upload_dir['basedir'] . '/' . $filename;
-		}
-		file_put_contents($file, $image_data);
-
 	};
 }
 add_action( 'admin_init', 'wp_insert_data' );
-
-function wp_delete_data() {
-	global $wpdb;
-	$table_name = $wpdb->prefix . 'staff_table';
-	if(isset($_GET['delete'])) {
-		$id = $_GET['delete'];
-		$wpdb->delete( $table_name, array( 'id' => $id ) );
-	}
-}
-
-add_action( 'admin_init', 'wp_delete_data' );
-
 
 function staff_api_init() {
 	register_rest_route( 'pageblock/v1', '/staff_table', array(

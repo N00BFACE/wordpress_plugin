@@ -131,21 +131,15 @@
 		},
 		"staff": {
 			"type": "array",
-			"default": {
-				"name": "",
-				"position": "",
-				"email": "",
-				"description": "",
-				"since": "",
-				"id": "",
-				"image": "",
-				"number": 2,
-				"selector": ".staff"
-			}
+			"default": []
 		},
 		"showStaff": {
 			"type": "boolean",
 			"default": true
+		},
+		"staffNumber": {
+			"type": "number",
+			"default": 1
 		}
 	},
 	"textdomain": "pageblock",

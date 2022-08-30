@@ -1,5 +1,6 @@
 import { useBlockProps } from '@wordpress/block-editor';
 import { RichText } from '@wordpress/block-editor';
+import { __ } from '@wordpress/i18n';
 
 export default function save( { attributes } ) {
 	const {
@@ -7,8 +8,11 @@ export default function save( { attributes } ) {
 		showTitle, showSubtitle, showHeader, showImage,
 		row_one, showRowOne, showRowOneImage, showRowOneSubtitle, showRowOneTitle, showRowOneText,
 		row_two, showRowTwo, showRowTwoImage, showRowTwoSubtitle, showRowTwoTitle, showRowTwoText,
-		showAboutUs,
+		showAboutUs, showStaff, staff, staffNumber
 	} = attributes;
+
+	const staffNum = staffNumber;
+
 	return (
 		<div { ...useBlockProps.save() } style={{ maxWidth: '840px', margin: '0 auto' }} >
 			{ showHeader &&
@@ -89,6 +93,47 @@ export default function save( { attributes } ) {
 									<img src={ row_two.url } alt={ row_two.alt } style={{ width: '100%'}} />
 								</div>
 							}
+						</div>
+					}
+					{ showStaff &&
+						<div className="pageblock-about-us-staff staff" style={{ display: 'grid', gridTemplateColumns: '33% 33% 33%', columnGap: '5px'}}>
+							{ staff.map( ( staffMember, index ) => {
+								if ( index < staffNum) {
+									if( staffNum < 4 ) {
+										return (
+											<div className="staff-member">
+												<div style={{ backgroundColor: 'whitesmoke', textAlign: 'center', }}>
+													<h5>{ staffMember.name }</h5>
+													<p> { staffMember.image } </p>
+													<p>{ staffMember.position }</p>
+												</div>
+											</div>
+										);
+									}
+									if ( staffNum > 3 && staffNum < 7 ) {
+										return (
+											<div className="staff-member">
+												<div style={{ backgroundColor: 'whitesmoke', textAlign: 'center', }}>
+													<h5>{ staffMember.name }</h5>
+													<p> { staffMember.image } </p>
+													<p>{ staffMember.position }</p>
+												</div>
+											</div>
+										);
+									}
+									if ( staffNum > 6 && staffNum < 10 ) {
+										return (
+											<div className="staff-member">
+												<div style={{ backgroundColor: 'whitesmoke', textAlign: 'center', }}>
+													<h5>{ staffMember.name }</h5>
+													<p> { staffMember.image } </p>
+													<p>{ staffMember.position }</p>
+												</div>
+											</div>
+										);
+									}
+								}
+							} ) }
 						</div>
 					}
 				</div>

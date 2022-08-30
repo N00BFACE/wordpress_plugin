@@ -1,10 +1,8 @@
 import { __ } from '@wordpress/i18n';
 import { useBlockProps } from '@wordpress/block-editor';
 import { RichText, InspectorControls, MediaUpload, BlockControls, AlignmentToolbar } from '@wordpress/block-editor';
-import { Panel, PanelBody, Button, ToggleControl, ColorPalette, Card, CardHeader, CardBody, CardFooter } from '@wordpress/components';
+import { Panel, PanelBody, Button, ToggleControl, ColorPalette, Card, CardHeader, CardBody, CardFooter, RangeControl, SelectControl } from '@wordpress/components';
 import apiFetch from '@wordpress/api-fetch';
-import { useEffect } from '@wordpress/element';
-import { InputNumber } from 'antd';
 import React from 'react';
 
 export default function Edit( { attributes, setAttributes } ) {
@@ -13,18 +11,17 @@ export default function Edit( { attributes, setAttributes } ) {
 		showHeader, showTitle, showSubtitle, showImage,
 		row_one, showRowOne, showRowOneImage, showRowOneSubtitle, showRowOneTitle, showRowOneText,
 		row_two, showRowTwo, showRowTwoImage, showRowTwoText,
-		showAboutUs, showStaff, staff,
+		showAboutUs, showStaff, staff, staffNumber,
+		showContactUs, showContactForm,
 	} = attributes;
-
-	function staffList() {
-		apiFetch( { path: '/pageblock/v1/staff_table' } ).then( ( data ) => {
-			setAttributes( { staff: data} )
-		} )
-	}
-
-	useEffect( () => {
-		staffList();
+	
+	apiFetch( { path: '/pageblock/v1/staff_table' } ).then( ( data ) => {
+		setAttributes( { staff: data} )
 	} );
+
+	//make it dynamic
+
+	const staffNum = staffNumber;
 
 	return (
 		<div { ...useBlockProps() }>
@@ -322,26 +319,61 @@ export default function Edit( { attributes, setAttributes } ) {
 						</div>
 					}
 					{ showStaff &&
-					
-					<div className="staff">
-						{ staff.map( ( staffMember, index ) => {
-							if ( index < staff.length ) {
-								return (
-									<div className="staff-member">
-										<img src={ staffMember.image } alt={ staffMember.name } />
-										<h3>{ staffMember.name }</h3>
-										<p>{ staffMember.position }</p>
-									</div>
-								);
-							}
-						} ) }
-					</div>
+						<div className="pageblock-about-us-staff staff" style={{ display: 'grid', gridTemplateColumns: '33% 33% 33%', columnGap: '5px'}}>
+							{ staff?.map( ( staffMember, index ) => {
+								//take staffMember.id and get the image from media library
+								//upload image to media library and get the id
+								//set the id to staffMember.id
+								if ( index < staffNum) {
+									if( staff.length == 0 ) {
+										return (
+											<p>No staff in your records</p>
+										)
+									}
+									if( staffNum < 4 ) {
+										return (
+											<div className="staff-member">
+												<div style={{ backgroundColor: 'whitesmoke', textAlign: 'center', }}>
+													<h5>{ staffMember.name }</h5>
+													{/* <img src="../wp-content/uploads/2022/08/{staffMember.image}" /> */}
+													<p> { staffMember.image } </p>
+													<p>{ staffMember.position }</p>
+												</div>
+											</div>
+										);
+									}
+									if ( staffNum > 3 && staffNum < 7 ) {
+										return (
+											<div className="staff-member">
+												<div style={{ backgroundColor: 'whitesmoke', textAlign: 'center', }}>
+													<h5>{ staffMember.name }</h5>
+													{/* <img src="../wp-content/uploads/2022/08/{ staffMember.image }" /> */}
+													<p> { staffMember.image } </p>
+													<p>{ staffMember.position }</p>
+												</div>
+											</div>
+										);
+									}
+									if ( staffNum > 6 && staffNum < 10 ) {
+										return (
+											<div className="staff-member">
+												<div style={{ backgroundColor: 'whitesmoke', textAlign: 'center', }}>
+													<h5>{ staffMember.name }</h5>
+													{/* <img src="../wp-content/uploads/2022/08/{ staffMember.image }" /> */}
+													<p>{ staffMember.position }</p>
+												</div>
+											</div>
+										);
+									}
+								}
+							} ) }
+						</div>
 					}
 				</div>
 			}
 			<InspectorControls>
 				<Panel>
-					<PanelBody title={ __( 'Home Settings' ) } initialOpen={ false }>
+					<PanelBody title='Home Settings' initialOpen={ false }>
 						<PanelBody title='Visibility Settings' initialOpen={ false }>
 							<ToggleControl
 								label={ __( 'Show Home' ) }
@@ -686,7 +718,50 @@ export default function Edit( { attributes, setAttributes } ) {
 							</PanelBody>
 						</PanelBody>
 						<PanelBody title="Staff Settings" initialOpen={false}>
-							
+							<RangeControl
+								label={ __( 'Number of Staff' ) }
+								value={ staffNumber }
+								onChange={ ( value ) => {
+									setAttributes( {
+										staffNumber: value
+									} );
+								} }
+								min={ 1 }
+								max={ 9 }
+								step={ 1 }
+							/>
+						</PanelBody>
+					</PanelBody>
+					<PanelBody title='Contact Us Settings' initialOpen={false}>
+						<PanelBody title='Visibility Settings' initialOpen={false}>
+							<ToggleControl
+								label={ __('Show Contact Us') }
+								checked={showContactUs}
+								onChange={ (value) => {
+									setAttributes( {
+										showContactUs: value,
+									} );
+								} }
+							/>
+							<ToggleControl
+								label={ __('Show Contact Form') }
+								checked={showContactForm}
+								onChange={ (value) => {
+									setAttributes( {
+										showContactForm: value,
+									} )
+								} }
+							/>
+						</PanelBody>
+						<PanelBody title='Contact Form Setting' initialOpen={false}>
+							<SelectControl
+								label={ __('Select Contact Form') }
+								options={[
+									{ label: 'Contact Form 1', value: 'contact_form_1' },
+									{ label: 'Contact Form 2', value: 'contact_form_2' },
+									{ label: 'Contact Form 3', value: 'contact_form_3' },
+								]}
+							/>
 						</PanelBody>
 					</PanelBody>
 				</Panel>
