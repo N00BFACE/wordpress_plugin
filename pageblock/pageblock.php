@@ -168,13 +168,26 @@ function wp_insert_data() {
 		$name = $_POST['fullname'];
 		$position = $_POST['position'];
 		$email = $_POST['email'];
-		$image = $_FILES['image']['name'];
-		$img = time().$image;
-		$folder = "../wp-content/plugins/pageblock/assets/images/staff/".$img;
-		$temp = $_FILES['image']['tmp_name'];
-		move_uploaded_file($temp, $folder);
 		$description = $_POST['description'];
 		$since = $_POST['since'];
+		$attachment = array(
+			'post_mime_type' => $_FILES['image']['type'],
+			'post_title' => preg_replace('/\.[^.]+$/', '', basename($_FILES['image']['name'])),
+			'post_content' => '',
+			'post_status' => 'inherit'
+		);
+		$attach_id = wp_insert_attachment( $attachment, $_FILES['image']['tmp_name'] );
+		require_once(ABSPATH . 'wp-admin/includes/image.php');
+		$attach_data = wp_generate_attachment_metadata( $attach_id, $_FILES['image']['tmp_name'] );
+		wp_update_attachment_metadata( $attach_id, $attach_data );
+		$uploads = wp_upload_dir();
+		$filename = basename($_FILES['image']['name']);
+		$new_file = $uploads['path'] . '/' . $filename;
+		$filetype = wp_check_filetype( basename( $filename ), null );
+		move_uploaded_file( $_FILES['image']['tmp_name'], $new_file );
+		$img = $attach_id;
+		$location = wp_get_attachment_image_src($img, 'full');
+		$location = $location[0];
 		$wpdb->insert( 
 			$table_name, 
 			array( 
@@ -185,14 +198,7 @@ function wp_insert_data() {
 				'description' => $description,
 				'since' => $since
 			),
-			array( 
-				'%s',
-				'%s',
-				'%s',
-				'%s',
-				'%s',
-				'%s'
-			)
+			array( '%s', '%s', '%s', '%s', '%s', '%s' )
 		);
 	};
 }

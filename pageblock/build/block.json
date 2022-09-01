@@ -164,6 +164,15 @@
       "type": "boolean",
       "default": true
     },
+    "staffImage": {
+      "type": "object",
+      "default": {
+        "url": "",
+        "id": "",
+        "alt": "",
+        "source_url": ""
+      }
+    },
     "showName": {
       "type": "boolean",
       "default": true

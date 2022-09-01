@@ -100,7 +100,6 @@ export default function save( { attributes } ) {
 											<div className="staff-member">
 												<div style={{ backgroundColor: 'whitesmoke', textAlign: 'center', }}>
 													<h5>{ staffMember.name }</h5>
-													<img src={ "http://localhost/wordpress/wp-content/plugins/pageblock/assets/images/staff/" + staffMember.image } alt={ staffMember.name } style={{ width: '100%' }} />
 													<p>{ staffMember.position }</p>
 												</div>
 											</div>
@@ -111,8 +110,6 @@ export default function save( { attributes } ) {
 											<div className="staff-member">
 												<div style={{ backgroundColor: 'whitesmoke', textAlign: 'center', }}>
 													<h5>{ staffMember.name }</h5>
-													
-													<img src={ "http://localhost/wordpress/wp-content/plugins/pageblock/assets/images/staff/" + staffMember.image } alt={ staffMember.name } style={{ width: '100%' }} />
 													<p>{ staffMember.position }</p>
 												</div>
 											</div>
@@ -123,7 +120,6 @@ export default function save( { attributes } ) {
 											<div className="staff-member">
 												<div style={{ backgroundColor: 'whitesmoke', textAlign: 'center', }}>
 													<h5>{ staffMember.name }</h5>
-													<img src={ "http://localhost/wordpress/wp-content/plugins/pageblock/assets/images/staff/" + staffMember.image } alt={ staffMember.name } style={{ width: '100%' }} />
 													<p>{ staffMember.position }</p>
 												</div>
 											</div>

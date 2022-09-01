@@ -22,6 +22,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/api-fetch */ "@wordpress/api-fetch");
 /* harmony import */ var _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_5__);
+
 
 
 
@@ -67,8 +70,7 @@ function Edit(_ref) {
     setAttributes({
       staff: data
     });
-  }); //make it dynamic
-
+  });
   const staffNum = staffNumber;
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.useBlockProps)(), showHeader && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "pageblock-home",
@@ -313,13 +315,7 @@ function Edit(_ref) {
             backgroundColor: 'whitesmoke',
             textAlign: 'center'
           }
-        }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, staffMember.name), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
-          src: "http://localhost/wordpress/wp-content/plugins/pageblock/assets/images/staff/" + staffMember.image,
-          alt: staffMember.name,
-          style: {
-            width: '100%'
-          }
-        }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, staffMember.position)));
+        }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, staffMember.name), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, " ", staffMember.image, " "), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, staffMember.position)));
       }
 
       if (staffNum > 3 && staffNum < 7) {
@@ -330,13 +326,7 @@ function Edit(_ref) {
             backgroundColor: 'whitesmoke',
             textAlign: 'center'
           }
-        }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, staffMember.name), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
-          src: "../assets/images/staff/" + staffMember.image,
-          alt: staffMember.name,
-          style: {
-            width: '100%'
-          }
-        }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, staffMember.position)));
+        }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, staffMember.name), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, staffMember.position)));
       }
 
       if (staffNum > 6 && staffNum < 10) {
@@ -347,13 +337,7 @@ function Edit(_ref) {
             backgroundColor: 'whitesmoke',
             textAlign: 'center'
           }
-        }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, staffMember.name), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
-          src: "../assets/images/staff/" + staffMember.image,
-          alt: staffMember.name,
-          style: {
-            width: '100%'
-          }
-        }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, staffMember.position)));
+        }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, staffMember.name), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, staffMember.position)));
       }
     }
   }))), showContactUs && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -897,6 +881,7 @@ function Edit(_ref) {
     }
   }))))));
 }
+;
 
 /***/ }),
 
@@ -1066,13 +1051,7 @@ function save(_ref) {
             backgroundColor: 'whitesmoke',
             textAlign: 'center'
           }
-        }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("h5", null, staffMember.name), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("img", {
-          src: "http://localhost/wordpress/wp-content/plugins/pageblock/assets/images/staff/" + staffMember.image,
-          alt: staffMember.name,
-          style: {
-            width: '100%'
-          }
-        }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("p", null, staffMember.position)));
+        }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("h5", null, staffMember.name), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("p", null, staffMember.position)));
       }
 
       if (staffNum > 3 && staffNum < 7) {
@@ -1083,13 +1062,7 @@ function save(_ref) {
             backgroundColor: 'whitesmoke',
             textAlign: 'center'
           }
-        }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("h5", null, staffMember.name), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("img", {
-          src: "http://localhost/wordpress/wp-content/plugins/pageblock/assets/images/staff/" + staffMember.image,
-          alt: staffMember.name,
-          style: {
-            width: '100%'
-          }
-        }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("p", null, staffMember.position)));
+        }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("h5", null, staffMember.name), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("p", null, staffMember.position)));
       }
 
       if (staffNum > 6 && staffNum < 10) {
@@ -1100,13 +1073,7 @@ function save(_ref) {
             backgroundColor: 'whitesmoke',
             textAlign: 'center'
           }
-        }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("h5", null, staffMember.name), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("img", {
-          src: "http://localhost/wordpress/wp-content/plugins/pageblock/assets/images/staff/" + staffMember.image,
-          alt: staffMember.name,
-          style: {
-            width: '100%'
-          }
-        }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("p", null, staffMember.position)));
+        }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("h5", null, staffMember.name), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("p", null, staffMember.position)));
       }
     }
   }))), showContactUs && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("div", {
@@ -1255,6 +1222,16 @@ module.exports = window["wp"]["components"];
 
 /***/ }),
 
+/***/ "@wordpress/data":
+/*!******************************!*\
+  !*** external ["wp","data"] ***!
+  \******************************/
+/***/ ((module) => {
+
+module.exports = window["wp"]["data"];
+
+/***/ }),
+
 /***/ "@wordpress/element":
 /*!*********************************!*\
   !*** external ["wp","element"] ***!
@@ -1310,7 +1287,7 @@ function _extends() {
   \************************/
 /***/ ((module) => {
 
-module.exports = JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":2,"name":"create-block/pageblock","version":"0.1.0","title":"Pageblock","category":"widgets","icon":"admin-page","description":"Example static block scaffolded with Create Block tool.","supports":{"html":false},"attributes":{"header_title":{"type":"object","default":{"text":"","tag":"h2","align":"","color":""}},"header_subtitle":{"type":"object","default":{"text":"","tag":"small","color":""}},"image":{"type":"object","default":{"url":"","id":"","alt":"","color":""}},"showHeader":{"type":"boolean","default":true},"showTitle":{"type":"boolean","default":true},"showSubtitle":{"type":"boolean","default":true},"showImage":{"type":"boolean","default":true},"row_one":{"type":"object","default":{"subtitle":"","title":"","text":"","selector":".row-one","align":"","back":"","color":"","url":"","id":"","alt":""}},"showRowOne":{"type":"boolean","default":true},"showRowOneImage":{"type":"boolean","default":true},"showRowOneSubtitle":{"type":"boolean","default":true},"showRowOneTitle":{"type":"boolean","default":true},"showRowOneText":{"type":"boolean","default":true},"row_two":{"type":"object","default":{"subtitle":"","title":"","text":"","selector":".row-two","align":"","back":"","color":"","url":"","id":"","alt":""}},"showRowTwo":{"type":"boolean","default":true},"showRowTwoImage":{"type":"boolean","default":true},"showRowTwoSubtitle":{"type":"boolean","default":true},"showRowTwoTitle":{"type":"boolean","default":true},"showRowTwoText":{"type":"boolean","default":true},"showAboutUs":{"type":"boolean","default":true},"staff":{"type":"array","default":[]},"showStaff":{"type":"boolean","default":true},"staffNumber":{"type":"number","default":1},"showContactUs":{"type":"boolean","default":true},"contact_form":{"type":"object","default":{"title":"","name":"","email":"","message":"","submit":"","success":"","error":"","selector":".contact-form"}},"showContactForm":{"type":"boolean","default":true},"showContactFormTitle":{"type":"boolean","default":true},"showName":{"type":"boolean","default":true}},"textdomain":"pageblock","editorScript":"file:./index.js"}');
+module.exports = JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":2,"name":"create-block/pageblock","version":"0.1.0","title":"Pageblock","category":"widgets","icon":"admin-page","description":"Example static block scaffolded with Create Block tool.","supports":{"html":false},"attributes":{"header_title":{"type":"object","default":{"text":"","tag":"h2","align":"","color":""}},"header_subtitle":{"type":"object","default":{"text":"","tag":"small","color":""}},"image":{"type":"object","default":{"url":"","id":"","alt":"","color":""}},"showHeader":{"type":"boolean","default":true},"showTitle":{"type":"boolean","default":true},"showSubtitle":{"type":"boolean","default":true},"showImage":{"type":"boolean","default":true},"row_one":{"type":"object","default":{"subtitle":"","title":"","text":"","selector":".row-one","align":"","back":"","color":"","url":"","id":"","alt":""}},"showRowOne":{"type":"boolean","default":true},"showRowOneImage":{"type":"boolean","default":true},"showRowOneSubtitle":{"type":"boolean","default":true},"showRowOneTitle":{"type":"boolean","default":true},"showRowOneText":{"type":"boolean","default":true},"row_two":{"type":"object","default":{"subtitle":"","title":"","text":"","selector":".row-two","align":"","back":"","color":"","url":"","id":"","alt":""}},"showRowTwo":{"type":"boolean","default":true},"showRowTwoImage":{"type":"boolean","default":true},"showRowTwoSubtitle":{"type":"boolean","default":true},"showRowTwoTitle":{"type":"boolean","default":true},"showRowTwoText":{"type":"boolean","default":true},"showAboutUs":{"type":"boolean","default":true},"staff":{"type":"array","default":[]},"showStaff":{"type":"boolean","default":true},"staffNumber":{"type":"number","default":1},"showContactUs":{"type":"boolean","default":true},"contact_form":{"type":"object","default":{"title":"","name":"","email":"","message":"","submit":"","success":"","error":"","selector":".contact-form"}},"showContactForm":{"type":"boolean","default":true},"showContactFormTitle":{"type":"boolean","default":true},"staffImage":{"type":"object","default":{"url":"","id":"","alt":"","source_url":""}},"showName":{"type":"boolean","default":true}},"textdomain":"pageblock","editorScript":"file:./index.js"}');
 
 /***/ })
 

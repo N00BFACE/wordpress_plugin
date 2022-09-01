@@ -3,6 +3,7 @@ import { useBlockProps } from '@wordpress/block-editor';
 import { RichText, InspectorControls, MediaUpload, BlockControls, AlignmentToolbar } from '@wordpress/block-editor';
 import { Panel, PanelBody, Button, ToggleControl, ColorPalette, Card, CardHeader, CardBody, CardFooter, RangeControl } from '@wordpress/components';
 import apiFetch from '@wordpress/api-fetch';
+import { useSelect } from '@wordpress/data';
 
 export default function Edit( { attributes, setAttributes } ) {
 	const {
@@ -11,36 +12,17 @@ export default function Edit( { attributes, setAttributes } ) {
 		row_one, showRowOne, showRowOneImage, showRowOneSubtitle, showRowOneTitle, showRowOneText,
 		row_two, showRowTwo, showRowTwoImage, showRowTwoText,
 		showAboutUs, showStaff, staff, staffNumber,
-		showContactUs, contact_form, showContactForm, showContactFormTitle, showName,
+		showContactUs, contact_form, showContactForm, showContactFormTitle, showName
 	} = attributes;
-	
+
 	apiFetch( { path: '/pageblock/v1/staff_table' } ).then( ( data ) => {
 		setAttributes( { staff: data} )
 	} );
-
-	//make it dynamic
-
+	
 	const staffNum = staffNumber;
 
 	return (
 		<div { ...useBlockProps() }>
-			{/* { staff.map( ( staffMember, index ) => {
-				if ( index < staff.length ) {
-					return (
-						<div className="staff-member">
-							<img src={ staffMember.image } alt={ staffMember.name } />
-							<h3>{ staffMember.name }</h3>
-							<p>{ staffMember.position }</p>
-						</div>
-					);
-				}
-			} ) } */}
-			{/* { staff.map( ( staff ) => {
-				return <div>
-					{ staff.email }
-				</div>
-			} ) } */}
-
 			{ showHeader && 
 				<div className="pageblock-home" 
 				style={{
@@ -323,7 +305,7 @@ export default function Edit( { attributes, setAttributes } ) {
 											<div className="staff-member">
 												<div style={{ backgroundColor: 'whitesmoke', textAlign: 'center', }}>
 													<h5>{ staffMember.name }</h5>
-													<img src={ "http://localhost/wordpress/wp-content/plugins/pageblock/assets/images/staff/" + staffMember.image } alt={ staffMember.name } style={{ width: '100%' }} />
+													<p> { staffMember.image } </p>
 													<p>{ staffMember.position }</p>
 												</div>
 											</div>
@@ -334,7 +316,6 @@ export default function Edit( { attributes, setAttributes } ) {
 											<div className="staff-member">
 												<div style={{ backgroundColor: 'whitesmoke', textAlign: 'center', }}>
 													<h5>{ staffMember.name }</h5>
-													<img src={ "../assets/images/staff/" + staffMember.image } alt={ staffMember.name } style={{ width: '100%' }} />
 													<p>{ staffMember.position }</p>
 												</div>
 											</div>
@@ -345,7 +326,6 @@ export default function Edit( { attributes, setAttributes } ) {
 											<div className="staff-member">
 												<div style={{ backgroundColor: 'whitesmoke', textAlign: 'center', }}>
 													<h5>{ staffMember.name }</h5>
-													<img src={ "../assets/images/staff/" + staffMember.image } alt={ staffMember.name } style={{ width: '100%' }} />
 													<p>{ staffMember.position }</p>
 												</div>
 											</div>
@@ -841,5 +821,4 @@ export default function Edit( { attributes, setAttributes } ) {
 			</InspectorControls>
 		</div>
 	);
-}
-
+};
