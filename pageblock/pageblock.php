@@ -64,7 +64,7 @@ function staff_settings_page() {
 		<div>
 			<div class="add_staff">
 				<h4>Add New Staff</h4>
-				<form method="post">
+				<form method="post" enctype="multipart/form-data">
 					<?php settings_fields( 'pageblock_settings_group' ); ?>
 					<?php do_settings_sections( 'pageblock_settings_group' ); ?>
 					<table>
@@ -165,15 +165,33 @@ function wp_insert_data() {
 	global $wpdb;
 	$table_name = $wpdb->prefix . 'staff_table';
 	if(isset($_POST['fullname'])) {
+		$name = $_POST['fullname'];
+		$position = $_POST['position'];
+		$email = $_POST['email'];
+		$image = $_FILES['image']['name'];
+		$img = time().$image;
+		$folder = "../wp-content/plugins/pageblock/assets/images/staff/".$img;
+		$temp = $_FILES['image']['tmp_name'];
+		move_uploaded_file($temp, $folder);
+		$description = $_POST['description'];
+		$since = $_POST['since'];
 		$wpdb->insert( 
 			$table_name, 
 			array( 
-				'name' => $_POST['fullname'], 
-				'position' => $_POST['position'], 
-				'email' => $_POST['email'], 
-				'image' => $_POST['image'],
-				'description' => $_POST['description'] ,
-				'since' => $_POST['since'],
+				'name' => $name,
+				'position' => $position,
+				'email' => $email,
+				'image' => $img,
+				'description' => $description,
+				'since' => $since
+			),
+			array( 
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s'
 			)
 		);
 	};

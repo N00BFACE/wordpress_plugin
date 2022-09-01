@@ -138,6 +138,35 @@
     "staffNumber": {
       "type": "number",
       "default": 1
+    },
+    "showContactUs": {
+      "type": "boolean",
+      "default": true
+    },
+    "contact_form": {
+      "type": "object",
+      "default": {
+        "title": "",
+        "name": "",
+        "email": "",
+        "message": "",
+        "submit": "",
+        "success": "",
+        "error": "",
+        "selector": ".contact-form"
+      }
+    },
+    "showContactForm": {
+      "type": "boolean",
+      "default": true
+    },
+    "showContactFormTitle": {
+      "type": "boolean",
+      "default": true
+    },
+    "showName": {
+      "type": "boolean",
+      "default": true
     }
   },
   "textdomain": "pageblock",

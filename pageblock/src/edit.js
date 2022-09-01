@@ -1,9 +1,8 @@
 import { __ } from '@wordpress/i18n';
 import { useBlockProps } from '@wordpress/block-editor';
 import { RichText, InspectorControls, MediaUpload, BlockControls, AlignmentToolbar } from '@wordpress/block-editor';
-import { Panel, PanelBody, Button, ToggleControl, ColorPalette, Card, CardHeader, CardBody, CardFooter, RangeControl, SelectControl } from '@wordpress/components';
+import { Panel, PanelBody, Button, ToggleControl, ColorPalette, Card, CardHeader, CardBody, CardFooter, RangeControl } from '@wordpress/components';
 import apiFetch from '@wordpress/api-fetch';
-import React from 'react';
 
 export default function Edit( { attributes, setAttributes } ) {
 	const {
@@ -12,7 +11,7 @@ export default function Edit( { attributes, setAttributes } ) {
 		row_one, showRowOne, showRowOneImage, showRowOneSubtitle, showRowOneTitle, showRowOneText,
 		row_two, showRowTwo, showRowTwoImage, showRowTwoText,
 		showAboutUs, showStaff, staff, staffNumber,
-		showContactUs, showContactForm,
+		showContactUs, contact_form, showContactForm, showContactFormTitle, showName,
 	} = attributes;
 	
 	apiFetch( { path: '/pageblock/v1/staff_table' } ).then( ( data ) => {
@@ -44,75 +43,72 @@ export default function Edit( { attributes, setAttributes } ) {
 
 			{ showHeader && 
 				<div className="pageblock-home" 
-					style={{
-						backgroundImage: showImage ? `url(${ image.url })` : 'none',
-						backgroundSize: 'cover',
-						backgroundRepeat: 'no-repeat',
-						backgroundAttachment: 'fixed',
-						backgroundColor: image.color,
-					}}>
-					<div style={{
-						padding: '120px 60px 120px 60px'
-					}}>
-						<div className="pageblock-home-title" 
-							style={{
-								textAlign: header_title.align
-							}}>
-							{
-								<BlockControls>
-									<AlignmentToolbar
-										value = { header_title.align }
-										onChange = { ( align ) => {
-											setAttributes( {
-												header_title: {
-													...header_title,
-													align: align === undefined ? 'none' : align,
-												}
-											} );
-										} }
-									/>
-								</BlockControls>
-							}
-							{ showTitle && 
-								<RichText
-									tagName="h2"
-									value={ header_title.text }
-									onChange={ ( value ) => {
+				style={{
+					backgroundImage: showImage ? `url(${ image.url })` : 'none',
+					backgroundSize: 'cover',
+					backgroundRepeat: 'no-repeat',
+					backgroundAttachment: 'fixed',
+					backgroundColor: image.color,
+					padding: '120px 60px 120px 60px'
+				}}>
+					<div className="pageblock-home-title" 
+						style={{
+							textAlign: header_title.align
+						}}>
+						{
+							<BlockControls>
+								<AlignmentToolbar
+									value = { header_title.align }
+									onChange = { ( align ) => {
 										setAttributes( {
 											header_title: {
 												...header_title,
-												text: value,
+												align: align === undefined ? 'none' : align,
 											}
 										} );
 									} }
-									style={{
-										color: header_title.color,
-									}}
-									placeholder= 'Home Title'
 								/>
-							}
-						</div>
-						<div className="pageblock-home-subtitle" style= {{ textAlign: header_title.align,}} >
-							{ showSubtitle &&
-								<RichText
-									tagName="p"
-									value={ header_subtitle.text }
-									onChange={ ( value ) => {
-										setAttributes( {
-											header_subtitle: {
-												...header_subtitle,
-												text: value
-											}
-										} );
-									} }
-									style={{
-										color: header_subtitle.color,
-										padding: '0 70px 0 70px'
-									}}
-									placeholder= 'Home Subtitle'
-								/>
-							}
-						</div>
+							</BlockControls>
+						}
+						{ showTitle && 
+							<RichText
+								tagName="h2"
+								value={ header_title.text }
+								onChange={ ( value ) => {
+									setAttributes( {
+										header_title: {
+											...header_title,
+											text: value,
+										}
+									} );
+								} }
+								style={{
+									color: header_title.color,
+								}}
+								placeholder= 'Home Title'
+							/>
+						}
+					</div>
+					<div className="pageblock-home-subtitle" style= {{ textAlign: header_title.align,}} >
+						{ showSubtitle &&
+							<RichText
+								tagName="p"
+								value={ header_subtitle.text }
+								onChange={ ( value ) => {
+									setAttributes( {
+										header_subtitle: {
+											...header_subtitle,
+											text: value
+										}
+									} );
+								} }
+								style={{
+									color: header_subtitle.color,
+									padding: '0 70px 0 70px'
+								}}
+								placeholder= 'Home Subtitle'
+							/>
+						}
 					</div>
 				</div> 
 			}
@@ -321,22 +317,13 @@ export default function Edit( { attributes, setAttributes } ) {
 					{ showStaff &&
 						<div className="pageblock-about-us-staff staff" style={{ display: 'grid', gridTemplateColumns: '33% 33% 33%', columnGap: '5px'}}>
 							{ staff?.map( ( staffMember, index ) => {
-								//take staffMember.id and get the image from media library
-								//upload image to media library and get the id
-								//set the id to staffMember.id
-								if ( index < staffNum) {
-									if( staff.length == 0 ) {
-										return (
-											<p>No staff in your records</p>
-										)
-									}
+								if ( index < staffNum && staff.length != 0 ) {
 									if( staffNum < 4 ) {
 										return (
 											<div className="staff-member">
 												<div style={{ backgroundColor: 'whitesmoke', textAlign: 'center', }}>
 													<h5>{ staffMember.name }</h5>
-													{/* <img src="../wp-content/uploads/2022/08/{staffMember.image}" /> */}
-													<p> { staffMember.image } </p>
+													<img src={ "http://localhost/wordpress/wp-content/plugins/pageblock/assets/images/staff/" + staffMember.image } alt={ staffMember.name } style={{ width: '100%' }} />
 													<p>{ staffMember.position }</p>
 												</div>
 											</div>
@@ -347,8 +334,7 @@ export default function Edit( { attributes, setAttributes } ) {
 											<div className="staff-member">
 												<div style={{ backgroundColor: 'whitesmoke', textAlign: 'center', }}>
 													<h5>{ staffMember.name }</h5>
-													{/* <img src="../wp-content/uploads/2022/08/{ staffMember.image }" /> */}
-													<p> { staffMember.image } </p>
+													<img src={ "../assets/images/staff/" + staffMember.image } alt={ staffMember.name } style={{ width: '100%' }} />
 													<p>{ staffMember.position }</p>
 												</div>
 											</div>
@@ -359,7 +345,7 @@ export default function Edit( { attributes, setAttributes } ) {
 											<div className="staff-member">
 												<div style={{ backgroundColor: 'whitesmoke', textAlign: 'center', }}>
 													<h5>{ staffMember.name }</h5>
-													{/* <img src="../wp-content/uploads/2022/08/{ staffMember.image }" /> */}
+													<img src={ "../assets/images/staff/" + staffMember.image } alt={ staffMember.name } style={{ width: '100%' }} />
 													<p>{ staffMember.position }</p>
 												</div>
 											</div>
@@ -367,6 +353,65 @@ export default function Edit( { attributes, setAttributes } ) {
 									}
 								}
 							} ) }
+						</div>
+					}
+				</div>
+			}
+			{ showContactUs &&
+				<div className="pageblock-about-us-contact-us contact-us">
+					{ showContactForm &&
+						<div className="contact-us-contact-form contact-form">
+							{ showContactFormTitle &&
+								<div className="contact-us-contact-form-title">
+									<RichText
+										tagName="h4"
+										placeholder='...Write Contact Form Title'
+										value={ contact_form.title }
+										onChange={ ( value ) => {
+											setAttributes( { 
+												contact_form: {
+													...contact_form, 
+													title: value 
+												}
+											} ); 
+										} }
+									/>
+								</div>
+							}
+							{ showName &&
+								<div className="contact-us-contact-form-name">
+									<label htmlFor="name" style={{ display: 'block', margin: '10px', fontSize: '1.2rem', textTransform: 'uppercase', textAlign: 'left' }}>Name</label>
+									<input required type="text" className="form-control" id="name" placeholder="Enter name" style={{ width: '50%', borderRadius: '25px', border: '1px solid #ccc', padding: '10px', fontSize: '1rem', textAlign: 'left' }}/>
+								</div>
+							}
+							<div className="contact-us-contact-form-email">
+								<label htmlFor="email" style={{ display: 'block', margin: '10px', fontSize: '1.2rem', textTransform: 'uppercase', textAlign: 'left' }}>Email</label>
+								<input required type="email" className="form-control" id="email" placeholder="Enter email" style={{ width: '50%', borderRadius: '25px', border: '1px solid #ccc', padding: '10px', fontSize: '1rem', textAlign: 'left' }}/>
+							</div>
+							<div className="contact-us-contact-form-message">
+								<label htmlFor="message" style={{ display: 'block', margin: '10px', fontSize: '1.2rem', textTransform: 'uppercase', textAlign: 'left' }}>Message</label>
+								<textarea required className="form-control" id="message" rows="3" placeholder="Enter message" style={{ width: '70%', borderRadius: '15px', border: '1px solid #ccc', padding: '10px', fontSize: '1rem', textAlign: 'left' }}></textarea>
+							</div>
+							<div className="contact-us-contact-form-button">
+								<Button variant='primary' isDefault style={{ borderRadius: '15px', border: '1px solid #ccc', fontSize: '1.05rem', textTransform: 'uppercase', textAlign: 'center', marginRight: '5px' }} >
+									<RichText
+										tagName='p'
+										placeholder='..Button Text'
+										value={ contact_form.submit }
+										onChange={ ( value ) => {
+											setAttributes( {
+												contact_form: {
+													...contact_form,
+													submit: value
+												}
+											} );
+										} }
+									/>
+								</Button>
+								<Button isDefault onClick={ () => { setAttributes( { showContactForm: false } ); } } style={{ borderRadius: '15px', border: '1px solid #ccc', fontSize: '1rem', textTransform: 'uppercase', textAlign: 'center' }} >
+									<RichText value={ 'Cancel' } tagName='p' />
+								</Button>
+							</div>
 						</div>
 					}
 				</div>
@@ -754,6 +799,16 @@ export default function Edit( { attributes, setAttributes } ) {
 							/>
 						</PanelBody>
 						<PanelBody title='Contact Form Setting' initialOpen={false}>
+							{/* <ToggleControl
+								label={ __('Show Default Contact Form') }
+								checked={showDefaultContactForm}
+								onChange={ (value) => {
+									setAttributes( {
+										showDefaultContactForm: value,
+									} );
+								} }
+							/>
+							future update
 							<SelectControl
 								label={ __('Select Contact Form') }
 								options={[
@@ -761,6 +816,24 @@ export default function Edit( { attributes, setAttributes } ) {
 									{ label: 'Contact Form 2', value: 'contact_form_2' },
 									{ label: 'Contact Form 3', value: 'contact_form_3' },
 								]}
+							/> */}
+							<ToggleControl
+								label={ __('Show Contact Form Title') }
+								checked={showContactFormTitle}
+								onChange={ (value) => {
+									setAttributes( {
+										showContactFormTitle: value,
+									} );
+								} }
+							/>
+							<ToggleControl
+								label={ __('Show Name') }
+								checked={showName}
+								onChange={ (value) => {
+									setAttributes( {
+										showName: value,
+									} );
+								} }
 							/>
 						</PanelBody>
 					</PanelBody>

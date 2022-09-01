@@ -1,5 +1,4 @@
-import { useBlockProps } from '@wordpress/block-editor';
-import { RichText } from '@wordpress/block-editor';
+import { useBlockProps, RichText } from '@wordpress/block-editor';
 import { __ } from '@wordpress/i18n';
 
 export default function save( { attributes } ) {
@@ -8,48 +7,45 @@ export default function save( { attributes } ) {
 		showTitle, showSubtitle, showHeader, showImage,
 		row_one, showRowOne, showRowOneImage, showRowOneSubtitle, showRowOneTitle, showRowOneText,
 		row_two, showRowTwo, showRowTwoImage, showRowTwoSubtitle, showRowTwoTitle, showRowTwoText,
-		showAboutUs, showStaff, staff, staffNumber
+		showAboutUs, showStaff, staff, staffNumber,
+		showContactUs, contact_form, showContactForm, showContactFormTitle, showName,
 	} = attributes;
 
 	const staffNum = staffNumber;
 
 	return (
-		<div { ...useBlockProps.save() } style={{ maxWidth: '840px', margin: '0 auto' }} >
+		<div { ...useBlockProps.save() } style={{ maxWidth: '840px', margin: '0 auto', fontFamily: '-moz-initial' }} >
 			{ showHeader &&
 				<div className="pageblock-home"
-					style={{
-						backgroundImage: showImage ? `url(${ image.url })` : 'none',
-						backgroundSize: 'cover',
-						backgroundRepeat: 'no-repeat',
-						backgroundAttachment: 'fixed',
-						backgroundColor: image.color,
-					}}
-				>
-					<div style={{
-						padding: '120px 60px 120px 60px'
+				style={{
+					backgroundImage: showImage ? `url(${ image.url })` : 'none',
+					backgroundSize: 'cover',
+					backgroundRepeat: 'no-repeat',
+					backgroundAttachment: 'fixed',
+					backgroundColor: image.color,
+					padding: '120px 60px 120px 60px'
+				}}>
+					<div className="pageblock-home-title"
+						style={{
+						textAlign: header_title.align,
 					}}>
-						<div className="pageblock-home-title"
-							style={{
-							textAlign: header_title.align,
-						}}>
-							{ showTitle && 
-								<RichText.Content tagName="h2" value={ header_title.text } 
-									style={{
-										color: header_title.color,
-									}}
-								/>
-							}
-						</div>
-						<div className="pageblock-home-subtitle" style={{ textAlign: header_title.align }}>
-							{ showSubtitle &&
-								<RichText.Content tagName="p" value={ header_subtitle.text } 
-									style={{
-										color: header_subtitle.color,
-										padding: '0 70px 0 70px'
-									}}
-								/>
-							}
-						</div>
+						{ showTitle && 
+							<RichText.Content tagName="h2" value={ header_title.text } 
+								style={{
+									color: header_title.color,
+								}}
+							/>
+						}
+					</div>
+					<div className="pageblock-home-subtitle" style={{ textAlign: header_title.align }}>
+						{ showSubtitle &&
+							<RichText.Content tagName="p" value={ header_subtitle.text } 
+								style={{
+									color: header_subtitle.color,
+									padding: '0 70px 0 70px'
+								}}
+							/>
+						}
 					</div>
 				</div>
 			}
@@ -98,13 +94,13 @@ export default function save( { attributes } ) {
 					{ showStaff &&
 						<div className="pageblock-about-us-staff staff" style={{ display: 'grid', gridTemplateColumns: '33% 33% 33%', columnGap: '5px'}}>
 							{ staff.map( ( staffMember, index ) => {
-								if ( index < staffNum) {
+								if ( index < staffNum && staff.length != 0 ) {
 									if( staffNum < 4 ) {
 										return (
 											<div className="staff-member">
 												<div style={{ backgroundColor: 'whitesmoke', textAlign: 'center', }}>
 													<h5>{ staffMember.name }</h5>
-													<p> { staffMember.image } </p>
+													<img src={ "http://localhost/wordpress/wp-content/plugins/pageblock/assets/images/staff/" + staffMember.image } alt={ staffMember.name } style={{ width: '100%' }} />
 													<p>{ staffMember.position }</p>
 												</div>
 											</div>
@@ -115,7 +111,8 @@ export default function save( { attributes } ) {
 											<div className="staff-member">
 												<div style={{ backgroundColor: 'whitesmoke', textAlign: 'center', }}>
 													<h5>{ staffMember.name }</h5>
-													<p> { staffMember.image } </p>
+													
+													<img src={ "http://localhost/wordpress/wp-content/plugins/pageblock/assets/images/staff/" + staffMember.image } alt={ staffMember.name } style={{ width: '100%' }} />
 													<p>{ staffMember.position }</p>
 												</div>
 											</div>
@@ -126,7 +123,7 @@ export default function save( { attributes } ) {
 											<div className="staff-member">
 												<div style={{ backgroundColor: 'whitesmoke', textAlign: 'center', }}>
 													<h5>{ staffMember.name }</h5>
-													<p> { staffMember.image } </p>
+													<img src={ "http://localhost/wordpress/wp-content/plugins/pageblock/assets/images/staff/" + staffMember.image } alt={ staffMember.name } style={{ width: '100%' }} />
 													<p>{ staffMember.position }</p>
 												</div>
 											</div>
@@ -134,6 +131,36 @@ export default function save( { attributes } ) {
 									}
 								}
 							} ) }
+						</div>
+					}
+				</div>
+			}
+			{ showContactUs &&
+				<div className="pageblock-about-us-contact-us contact-us" >
+					{ showContactForm &&
+						<div className="contact-us-contact-form contact-form">
+							{ showContactFormTitle &&
+								<div className="contact-us-contact-form-title">
+									<RichText.Content tagName='h4' value={ contact_form.title } />
+								</div>
+							}
+							{ showName &&
+								<div className="contact-us-contact-form-name">
+									<label htmlFor="name" style={{ display: 'block', margin: '10px', fontSize: '1.2rem', textTransform: 'uppercase', textAlign: 'left' }}>Name</label>
+									<input required type="text" className="form-control" id="name" placeholder="Enter name" style={{ width: '50%', borderRadius: '25px', border: '1px solid #ccc', padding: '10px', fontSize: '1rem', textAlign: 'left', fontFamily: '-moz-initial' }}/>
+								</div>
+							}
+							<div className="contact-us-contact-form-email">
+								<label htmlFor="email" style={{ display: 'block', margin: '10px', fontSize: '1.2rem', textTransform: 'uppercase', textAlign: 'left' }}>Email</label>
+								<input required type="email" className="form-control" id="email" placeholder="Enter email" style={{ width: '50%', borderRadius: '25px', border: '1px solid #ccc', padding: '10px', fontSize: '1rem', textAlign: 'left', fontFamily: '-moz-initial' }}/>
+							</div>
+							<div className="contact-us-contact-form-message">
+								<label htmlFor="message" style={{ display: 'block', margin: '10px', fontSize: '1.2rem', textTransform: 'uppercase', textAlign: 'left' }}>Message</label>
+								<textarea required className="form-control" id="message" rows="3" placeholder="Enter message" style={{ width: '70%', borderRadius: '15px', border: '1px solid #ccc', padding: '10px', fontSize: '1rem', textAlign: 'left', fontFamily: '-moz-initial' }}></textarea>
+							</div>
+							<div className="contact-us-contact-form-button">
+								<button type="submit" className='btn btn-primary' style={{ borderRadius: '15px', border: '1px solid #ccc', fontSize: '1.05rem', textTransform: 'uppercase', textAlign: 'center', padding: '5px', fontFamily: '-moz-initial' }} > { contact_form.submit } </button>
+							</div>
 						</div>
 					}
 				</div>
