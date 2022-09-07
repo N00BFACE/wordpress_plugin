@@ -14,7 +14,7 @@ export default function save( { attributes } ) {
 	const staffNum = staffNumber;
 
 	return (
-		<div { ...useBlockProps.save() } style={{ maxWidth: '840px', margin: '0 auto', fontFamily: '-moz-initial' }} >
+		<div { ...useBlockProps.save() } style={{ fontFamily: '-moz-initial' }} >
 			{ showHeader &&
 				<div className="pageblock-home"
 				style={{
@@ -91,7 +91,7 @@ export default function save( { attributes } ) {
 							}
 						</div>
 					}
-					{ showStaff &&
+					{/* { showStaff &&
 						<div className="pageblock-about-us-staff staff" style={{ display: 'grid', gridTemplateColumns: '33% 33% 33%', columnGap: '5px'}}>
 							{ staff.map( ( staffMember, index ) => {
 								if ( index < staffNum && staff.length != 0 ) {
@@ -100,6 +100,7 @@ export default function save( { attributes } ) {
 											<div className="staff-member">
 												<div style={{ backgroundColor: 'whitesmoke', textAlign: 'center', }}>
 													<h5>{ staffMember.name }</h5>
+													<p>{ staffMember.image }</p>
 													<p>{ staffMember.position }</p>
 												</div>
 											</div>
@@ -110,6 +111,7 @@ export default function save( { attributes } ) {
 											<div className="staff-member">
 												<div style={{ backgroundColor: 'whitesmoke', textAlign: 'center', }}>
 													<h5>{ staffMember.name }</h5>
+													<p>{ staffMember.image }</p>
 													<p>{ staffMember.position }</p>
 												</div>
 											</div>
@@ -120,6 +122,7 @@ export default function save( { attributes } ) {
 											<div className="staff-member">
 												<div style={{ backgroundColor: 'whitesmoke', textAlign: 'center', }}>
 													<h5>{ staffMember.name }</h5>
+													<p>{ staffMember.image }</p>
 													<p>{ staffMember.position }</p>
 												</div>
 											</div>
@@ -128,7 +131,7 @@ export default function save( { attributes } ) {
 								}
 							} ) }
 						</div>
-					}
+					} */}
 				</div>
 			}
 			{ showContactUs &&
@@ -140,23 +143,25 @@ export default function save( { attributes } ) {
 									<RichText.Content tagName='h4' value={ contact_form.title } />
 								</div>
 							}
-							{ showName &&
-								<div className="contact-us-contact-form-name">
-									<label htmlFor="name" style={{ display: 'block', margin: '10px', fontSize: '1.2rem', textTransform: 'uppercase', textAlign: 'left' }}>Name</label>
-									<input required type="text" className="form-control" id="name" placeholder="Enter name" style={{ width: '50%', borderRadius: '25px', border: '1px solid #ccc', padding: '10px', fontSize: '1rem', textAlign: 'left', fontFamily: '-moz-initial' }}/>
+							<form action="" method="POST">
+								{ showName &&
+									<div className="contact-us-contact-form-name">
+										<label htmlFor="name" style={{ display: 'block', margin: '10px', fontSize: '1.2rem', textTransform: 'uppercase', textAlign: 'left' }}>Name</label>
+										<input required type="text" className="form-control" id="name" placeholder="Enter name" style={{ width: '50%', borderRadius: '25px', border: '1px solid #ccc', padding: '10px', fontSize: '1rem', textAlign: 'left', fontFamily: '-moz-initial' }}/>
+									</div>
+								}
+								<div className="contact-us-contact-form-email">
+									<label htmlFor="email" style={{ display: 'block', margin: '10px', fontSize: '1.2rem', textTransform: 'uppercase', textAlign: 'left' }}>Email</label>
+									<input required type="email" className="form-control" id="email" placeholder="Enter email" style={{ width: '50%', borderRadius: '25px', border: '1px solid #ccc', padding: '10px', fontSize: '1rem', textAlign: 'left', fontFamily: '-moz-initial' }}/>
 								</div>
-							}
-							<div className="contact-us-contact-form-email">
-								<label htmlFor="email" style={{ display: 'block', margin: '10px', fontSize: '1.2rem', textTransform: 'uppercase', textAlign: 'left' }}>Email</label>
-								<input required type="email" className="form-control" id="email" placeholder="Enter email" style={{ width: '50%', borderRadius: '25px', border: '1px solid #ccc', padding: '10px', fontSize: '1rem', textAlign: 'left', fontFamily: '-moz-initial' }}/>
-							</div>
-							<div className="contact-us-contact-form-message">
-								<label htmlFor="message" style={{ display: 'block', margin: '10px', fontSize: '1.2rem', textTransform: 'uppercase', textAlign: 'left' }}>Message</label>
-								<textarea required className="form-control" id="message" rows="3" placeholder="Enter message" style={{ width: '70%', borderRadius: '15px', border: '1px solid #ccc', padding: '10px', fontSize: '1rem', textAlign: 'left', fontFamily: '-moz-initial' }}></textarea>
-							</div>
-							<div className="contact-us-contact-form-button">
-								<button type="submit" className='btn btn-primary' style={{ borderRadius: '15px', border: '1px solid #ccc', fontSize: '1.05rem', textTransform: 'uppercase', textAlign: 'center', padding: '5px', fontFamily: '-moz-initial' }} > { contact_form.submit } </button>
-							</div>
+								<div className="contact-us-contact-form-message">
+									<label htmlFor="message" style={{ display: 'block', margin: '10px', fontSize: '1.2rem', textTransform: 'uppercase', textAlign: 'left' }}>Message</label>
+									<textarea required className="form-control" id="message" rows="3" placeholder="Enter message" style={{ width: '70%', borderRadius: '15px', border: '1px solid #ccc', padding: '10px', fontSize: '1rem', textAlign: 'left', fontFamily: '-moz-initial' }}></textarea>
+								</div>
+								<div className="contact-us-contact-form-button">
+									<input type="submit" className='button button-primary' style={{ borderRadius: '15px', border: '1px solid #ccc', fontSize: '1.05rem', textTransform: 'uppercase', textAlign: 'center', padding: '5px', fontFamily: '-moz-initial' }} value={ contact_form.submit } />
+								</div>
+							</form>
 						</div>
 					}
 				</div>

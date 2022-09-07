@@ -3,7 +3,7 @@ import { useBlockProps } from '@wordpress/block-editor';
 import { RichText, InspectorControls, MediaUpload, BlockControls, AlignmentToolbar } from '@wordpress/block-editor';
 import { Panel, PanelBody, Button, ToggleControl, ColorPalette, Card, CardHeader, CardBody, CardFooter, RangeControl } from '@wordpress/components';
 import apiFetch from '@wordpress/api-fetch';
-import { useSelect } from '@wordpress/data';
+import {useEffect, useState} from '@wordpress/element';
 
 export default function Edit( { attributes, setAttributes } ) {
 	const {
@@ -11,15 +11,46 @@ export default function Edit( { attributes, setAttributes } ) {
 		showHeader, showTitle, showSubtitle, showImage,
 		row_one, showRowOne, showRowOneImage, showRowOneSubtitle, showRowOneTitle, showRowOneText,
 		row_two, showRowTwo, showRowTwoImage, showRowTwoText,
-		showAboutUs, showStaff, staff, staffNumber,
+		showAboutUs, showStaff, staffNumber, staff,
 		showContactUs, contact_form, showContactForm, showContactFormTitle, showName
 	} = attributes;
 
-	apiFetch( { path: '/pageblock/v1/staff_table' } ).then( ( data ) => {
-		setAttributes( { staff: data} )
-	} );
-	
-	const staffNum = staffNumber;
+	// const [staff, setStaff] = useState([]);
+
+	// useEffect(async () => {
+	// 	const data = await apiFetch( { path: '/pageblock/v1/staff_table' } )
+	// 	.then( ( data ) => {
+	// 		setAttributes( { staff: data } );
+	// 	} );
+	// 	setStaff( data )
+
+	// 	let newData = []
+	// 	data.forEach(async _staff => {
+	// 		const media = await apiFetch( { path: `/wp/v2/media/${ _staff.image }` } )
+	// 		newData.push({
+	// 			_staff,
+	// 			media})
+	// 	})
+
+	// 	return (data, newData);
+	// 	console.debug({data, newData})
+
+	// 	console.log(data);
+	// }, [])
+
+
+	// return null
+
+
+	// const staffNum = staffNumber;
+
+	// const getAttachmentUrl = ( id ) => {
+	// 	return apiFetch( { path: `/wp/v2/media/${ id }` } ).then( ( data ) => {
+	// 		return data.source_url;
+	// 	} );
+	// }
+
+	// wp.data.select('core').getMedia(staff.image);
 
 	return (
 		<div { ...useBlockProps() }>
@@ -37,21 +68,6 @@ export default function Edit( { attributes, setAttributes } ) {
 						style={{
 							textAlign: header_title.align
 						}}>
-						{
-							<BlockControls>
-								<AlignmentToolbar
-									value = { header_title.align }
-									onChange = { ( align ) => {
-										setAttributes( {
-											header_title: {
-												...header_title,
-												align: align === undefined ? 'none' : align,
-											}
-										} );
-									} }
-								/>
-							</BlockControls>
-						}
 						{ showTitle && 
 							<RichText
 								tagName="h2"
@@ -85,8 +101,7 @@ export default function Edit( { attributes, setAttributes } ) {
 									} );
 								} }
 								style={{
-									color: header_subtitle.color,
-									padding: '0 70px 0 70px'
+									color: header_subtitle.color
 								}}
 								placeholder= 'Home Subtitle'
 							/>
@@ -296,7 +311,7 @@ export default function Edit( { attributes, setAttributes } ) {
 							}
 						</div>
 					}
-					{ showStaff &&
+					{/* { showStaff &&
 						<div className="pageblock-about-us-staff staff" style={{ display: 'grid', gridTemplateColumns: '33% 33% 33%', columnGap: '5px'}}>
 							{ staff?.map( ( staffMember, index ) => {
 								if ( index < staffNum && staff.length != 0 ) {
@@ -305,7 +320,7 @@ export default function Edit( { attributes, setAttributes } ) {
 											<div className="staff-member">
 												<div style={{ backgroundColor: 'whitesmoke', textAlign: 'center', }}>
 													<h5>{ staffMember.name }</h5>
-													<p> { staffMember.image } </p>
+													<p></p>
 													<p>{ staffMember.position }</p>
 												</div>
 											</div>
@@ -316,6 +331,7 @@ export default function Edit( { attributes, setAttributes } ) {
 											<div className="staff-member">
 												<div style={{ backgroundColor: 'whitesmoke', textAlign: 'center', }}>
 													<h5>{ staffMember.name }</h5>
+													<p>{ staffMember.image }</p>
 													<p>{ staffMember.position }</p>
 												</div>
 											</div>
@@ -326,6 +342,7 @@ export default function Edit( { attributes, setAttributes } ) {
 											<div className="staff-member">
 												<div style={{ backgroundColor: 'whitesmoke', textAlign: 'center', }}>
 													<h5>{ staffMember.name }</h5>
+													<p>{ staffMember.image }</p>
 													<p>{ staffMember.position }</p>
 												</div>
 											</div>
@@ -334,7 +351,7 @@ export default function Edit( { attributes, setAttributes } ) {
 								}
 							} ) }
 						</div>
-					}
+					} */}
 				</div>
 			}
 			{ showContactUs &&
@@ -507,6 +524,17 @@ export default function Edit( { attributes, setAttributes } ) {
 											color: value 
 										} } 
 									);
+								} }
+							/>
+							<AlignmentToolbar
+								value = { header_title.align }
+								onChange = { ( align ) => {
+									setAttributes( {
+										header_title: {
+											...header_title,
+											align: align === undefined ? 'none' : align,
+										}
+									} );
 								} }
 							/>
 						</PanelBody>
@@ -742,7 +770,7 @@ export default function Edit( { attributes, setAttributes } ) {
 								/>
 							</PanelBody>
 						</PanelBody>
-						<PanelBody title="Staff Settings" initialOpen={false}>
+						{/* <PanelBody title="Staff Settings" initialOpen={false}>
 							<RangeControl
 								label={ __( 'Number of Staff' ) }
 								value={ staffNumber }
@@ -755,7 +783,7 @@ export default function Edit( { attributes, setAttributes } ) {
 								max={ 9 }
 								step={ 1 }
 							/>
-						</PanelBody>
+						</PanelBody> */}
 					</PanelBody>
 					<PanelBody title='Contact Us Settings' initialOpen={false}>
 						<PanelBody title='Visibility Settings' initialOpen={false}>

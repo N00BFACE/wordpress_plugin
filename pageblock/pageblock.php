@@ -136,8 +136,8 @@ function staff_settings_page() {
 								echo '<td>' . $result->name . '</td>';
 								echo '<td>' . $result->position . '</td>';
 								echo '<td>' . $result->email . '</td>';
-								echo '<td><a href="?page=pageblock&edit=' . $result->id . '">Edit</a> / <a href="?page=pageblock&view=' . $result->id . '">View</a></td>';
-								echo '<td><a href="?page=pageblock&delete=' . $result->id . '">Delete</a></td>';
+								echo '<td><a href="#">Edit</a> / <a href="#">View</a></td>';
+								echo '<td><a href="#">Delete</a></td>';
 								echo '</tr>';
 							}
 						?>	
@@ -170,36 +170,48 @@ function wp_insert_data() {
 		$email = $_POST['email'];
 		$description = $_POST['description'];
 		$since = $_POST['since'];
-		$attachment = array(
-			'post_mime_type' => $_FILES['image']['type'],
-			'post_title' => preg_replace('/\.[^.]+$/', '', basename($_FILES['image']['name'])),
-			'post_content' => '',
-			'post_status' => 'inherit'
-		);
-		$attach_id = wp_insert_attachment( $attachment, $_FILES['image']['tmp_name'] );
+		// $wp_upload_dir = wp_upload_dir();
+		// $attachment = array(
+		// 	'guid'           => $wp_upload_dir['url'] . '/' . basename($_FILES['image']['name']),
+		// 	'post_mime_type' => $_FILES['image']['type'],
+		// 	'post_title' => preg_replace('/\.[^.]+$/', '', basename($_FILES['image']['name'])),
+		// 	'post_content' => '',
+		// 	'post_status' => 'inherit'
+		// );
+
+		$attach_id = media_handle_upload( 'image', 0 );
 		require_once(ABSPATH . 'wp-admin/includes/image.php');
-		$attach_data = wp_generate_attachment_metadata( $attach_id, $_FILES['image']['tmp_name'] );
-		wp_update_attachment_metadata( $attach_id, $attach_data );
-		$uploads = wp_upload_dir();
-		$filename = basename($_FILES['image']['name']);
-		$new_file = $uploads['path'] . '/' . $filename;
-		$filetype = wp_check_filetype( basename( $filename ), null );
-		move_uploaded_file( $_FILES['image']['tmp_name'], $new_file );
-		$img = $attach_id;
-		$location = wp_get_attachment_image_src($img, 'full');
-		$location = $location[0];
+		// $attach_data = wp_generate_attachment_metadata( $attach_id, $_FILES['image']['tmp_name'] );
+		// wp_update_attachment_metadata( $attach_id, $attach_data );
+		// // $image_src = wp_get_attachment_image_src();
+		// $img = $attach_id;
+		// $img_url = wp_get_attachment_url( $attach_id );
+		// error_log( print_r( [$attach_data, "url" => $img_url], true ) );
 		$wpdb->insert( 
 			$table_name, 
 			array( 
 				'name' => $name,
 				'position' => $position,
 				'email' => $email,
-				'image' => $img,
+				'image' => $attach_id,
 				'description' => $description,
 				'since' => $since
-			),
-			array( '%s', '%s', '%s', '%s', '%s', '%s' )
+			)
 		);
+		// if($wpdb->insert_id) {
+		// 	$uploads = wp_upload_dir();
+		// 	$filename = basename($_FILES['image']['name']);
+		// 	$new_file = $uploads['path'] . '/' . $filename;
+		// 	$filetype = wp_check_filetype( basename( $filename ), null );
+		// 	move_uploaded_file( $_FILES['image']['tmp_name'], $new_file );
+		// 	echo '<div class="notice notice-success is-dismissible">
+		// 		<p>Successfully Added!</p>
+		// 	</div>';
+		// } else {
+		// 	echo '<div class="notice notice-error is-dismissible">
+		// 		<p>Error!</p>
+		// 	</div>';
+		// }
 	};
 }
 add_action( 'admin_init', 'wp_insert_data' );
@@ -207,7 +219,8 @@ add_action( 'admin_init', 'wp_insert_data' );
 function staff_api_init() {
 	register_rest_route( 'pageblock/v1', '/staff_table', array(
 		'methods' => 'GET',
-		'callback' => 'staff_table_api_handler'
+		// 'callback' => 'staff_table_api_handler',
+		'permission_callback' => 'staff_table_api_handler'
 	) );
 }
 add_action( 'rest_api_init', 'staff_api_init' );

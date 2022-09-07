@@ -8,7 +8,10 @@
   "icon": "admin-page",
   "description": "Example static block scaffolded with Create Block tool.",
   "supports": {
-    "html": false
+    "html": false,
+    "align": true,
+    "alignLeft": false,
+    "alignRight": false
   },
   "attributes": {
     "header_title": {
@@ -17,7 +20,8 @@
         "text": "",
         "tag": "h2",
         "align": "",
-        "color": ""
+        "color": "",
+        "size": ""
       }
     },
     "header_subtitle": {
@@ -25,7 +29,8 @@
       "default": {
         "text": "",
         "tag": "small",
-        "color": ""
+        "color": "",
+        "size": ""
       }
     },
     "image": {
@@ -163,15 +168,6 @@
     "showContactFormTitle": {
       "type": "boolean",
       "default": true
-    },
-    "staffImage": {
-      "type": "object",
-      "default": {
-        "url": "",
-        "id": "",
-        "alt": "",
-        "source_url": ""
-      }
     },
     "showName": {
       "type": "boolean",

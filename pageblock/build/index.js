@@ -22,8 +22,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/api-fetch */ "@wordpress/api-fetch");
 /* harmony import */ var _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
-/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_5__);
 
 
 
@@ -56,22 +54,40 @@ function Edit(_ref) {
     showRowTwoText,
     showAboutUs,
     showStaff,
-    staff,
     staffNumber,
+    staff,
     showContactUs,
     contact_form,
     showContactForm,
     showContactFormTitle,
     showName
-  } = attributes;
-  _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_4___default()({
-    path: '/pageblock/v1/staff_table'
-  }).then(data => {
-    setAttributes({
-      staff: data
-    });
-  });
-  const staffNum = staffNumber;
+  } = attributes; // const [staff, setStaff] = useState([]);
+  // useEffect(async () => {
+  // 	const data = await apiFetch( { path: '/pageblock/v1/staff_table' } )
+  // 	.then( ( data ) => {
+  // 		setAttributes( { staff: data } );
+  // 	} );
+  // 	setStaff( data )
+  // 	let newData = []
+  // 	data.forEach(async _staff => {
+  // 		const media = await apiFetch( { path: `/wp/v2/media/${ _staff.image }` } )
+  // 		newData.push({
+  // 			_staff,
+  // 			media})
+  // 	})
+  // 	return (data, newData);
+  // 	console.debug({data, newData})
+  // 	console.log(data);
+  // }, [])
+  // return null
+  // const staffNum = staffNumber;
+  // const getAttachmentUrl = ( id ) => {
+  // 	return apiFetch( { path: `/wp/v2/media/${ id }` } ).then( ( data ) => {
+  // 		return data.source_url;
+  // 	} );
+  // }
+  // wp.data.select('core').getMedia(staff.image);
+
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.useBlockProps)(), showHeader && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "pageblock-home",
     style: {
@@ -87,16 +103,7 @@ function Edit(_ref) {
     style: {
       textAlign: header_title.align
     }
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.BlockControls, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.AlignmentToolbar, {
-    value: header_title.align,
-    onChange: align => {
-      setAttributes({
-        header_title: { ...header_title,
-          align: align === undefined ? 'none' : align
-        }
-      });
-    }
-  })), showTitle && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.RichText, {
+  }, showTitle && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.RichText, {
     tagName: "h2",
     value: header_title.text,
     onChange: value => {
@@ -126,8 +133,7 @@ function Edit(_ref) {
       });
     },
     style: {
-      color: header_subtitle.color,
-      padding: '0 70px 0 70px'
+      color: header_subtitle.color
     },
     placeholder: "Home Subtitle"
   }))), showAboutUs && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -298,49 +304,7 @@ function Edit(_ref) {
         className: "button"
       }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Select Image'));
     }
-  })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.CardFooter, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("small", null, "Please choose your pictures from media library or upload new one."))))), showStaff && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "pageblock-about-us-staff staff",
-    style: {
-      display: 'grid',
-      gridTemplateColumns: '33% 33% 33%',
-      columnGap: '5px'
-    }
-  }, staff === null || staff === void 0 ? void 0 : staff.map((staffMember, index) => {
-    if (index < staffNum && staff.length != 0) {
-      if (staffNum < 4) {
-        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-          className: "staff-member"
-        }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-          style: {
-            backgroundColor: 'whitesmoke',
-            textAlign: 'center'
-          }
-        }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, staffMember.name), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, " ", staffMember.image, " "), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, staffMember.position)));
-      }
-
-      if (staffNum > 3 && staffNum < 7) {
-        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-          className: "staff-member"
-        }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-          style: {
-            backgroundColor: 'whitesmoke',
-            textAlign: 'center'
-          }
-        }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, staffMember.name), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, staffMember.position)));
-      }
-
-      if (staffNum > 6 && staffNum < 10) {
-        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-          className: "staff-member"
-        }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-          style: {
-            backgroundColor: 'whitesmoke',
-            textAlign: 'center'
-          }
-        }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, staffMember.name), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, staffMember.position)));
-      }
-    }
-  }))), showContactUs && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.CardFooter, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("small", null, "Please choose your pictures from media library or upload new one.")))))), showContactUs && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "pageblock-about-us-contact-us contact-us"
   }, showContactForm && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "contact-us-contact-form contact-form"
@@ -594,6 +558,15 @@ function Edit(_ref) {
         }
       });
     }
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.AlignmentToolbar, {
+    value: header_title.align,
+    onChange: align => {
+      setAttributes({
+        header_title: { ...header_title,
+          align: align === undefined ? 'none' : align
+        }
+      });
+    }
   })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.PanelBody, {
     title: "Home Subtitle",
     initialOpen: false
@@ -824,21 +797,7 @@ function Edit(_ref) {
         }
       });
     }
-  }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.PanelBody, {
-    title: "Staff Settings",
-    initialOpen: false
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.RangeControl, {
-    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Number of Staff'),
-    value: staffNumber,
-    onChange: value => {
-      setAttributes({
-        staffNumber: value
-      });
-    },
-    min: 1,
-    max: 9,
-    step: 1
-  }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.PanelBody, {
+  })))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.PanelBody, {
     title: "Contact Us Settings",
     initialOpen: false
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.PanelBody, {
@@ -943,8 +902,6 @@ function save(_ref) {
   const staffNum = staffNumber;
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("div", (0,_babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0__["default"])({}, _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.useBlockProps.save(), {
     style: {
-      maxWidth: '840px',
-      margin: '0 auto',
       fontFamily: '-moz-initial'
     }
   }), showHeader && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("div", {
@@ -1034,49 +991,7 @@ function save(_ref) {
     style: {
       width: '100%'
     }
-  }))), showStaff && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("div", {
-    className: "pageblock-about-us-staff staff",
-    style: {
-      display: 'grid',
-      gridTemplateColumns: '33% 33% 33%',
-      columnGap: '5px'
-    }
-  }, staff.map((staffMember, index) => {
-    if (index < staffNum && staff.length != 0) {
-      if (staffNum < 4) {
-        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("div", {
-          className: "staff-member"
-        }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("div", {
-          style: {
-            backgroundColor: 'whitesmoke',
-            textAlign: 'center'
-          }
-        }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("h5", null, staffMember.name), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("p", null, staffMember.position)));
-      }
-
-      if (staffNum > 3 && staffNum < 7) {
-        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("div", {
-          className: "staff-member"
-        }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("div", {
-          style: {
-            backgroundColor: 'whitesmoke',
-            textAlign: 'center'
-          }
-        }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("h5", null, staffMember.name), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("p", null, staffMember.position)));
-      }
-
-      if (staffNum > 6 && staffNum < 10) {
-        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("div", {
-          className: "staff-member"
-        }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("div", {
-          style: {
-            backgroundColor: 'whitesmoke',
-            textAlign: 'center'
-          }
-        }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("h5", null, staffMember.name), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("p", null, staffMember.position)));
-      }
-    }
-  }))), showContactUs && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("div", {
+  })))), showContactUs && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("div", {
     className: "pageblock-about-us-contact-us contact-us"
   }, showContactForm && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("div", {
     className: "contact-us-contact-form contact-form"
@@ -1085,7 +1000,10 @@ function save(_ref) {
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.RichText.Content, {
     tagName: "h4",
     value: contact_form.title
-  })), showName && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("div", {
+  })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("form", {
+    action: "",
+    method: "POST"
+  }, showName && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("div", {
     className: "contact-us-contact-form-name"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("label", {
     htmlFor: "name",
@@ -1165,9 +1083,9 @@ function save(_ref) {
     }
   })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("div", {
     className: "contact-us-contact-form-button"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("button", {
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("input", {
     type: "submit",
-    className: "btn btn-primary",
+    className: "button button-primary",
     style: {
       borderRadius: '15px',
       border: '1px solid #ccc',
@@ -1176,8 +1094,9 @@ function save(_ref) {
       textAlign: 'center',
       padding: '5px',
       fontFamily: '-moz-initial'
-    }
-  }, " ", contact_form.submit, " ")))));
+    },
+    value: contact_form.submit
+  }))))));
 }
 
 /***/ }),
@@ -1219,16 +1138,6 @@ module.exports = window["wp"]["blocks"];
 /***/ ((module) => {
 
 module.exports = window["wp"]["components"];
-
-/***/ }),
-
-/***/ "@wordpress/data":
-/*!******************************!*\
-  !*** external ["wp","data"] ***!
-  \******************************/
-/***/ ((module) => {
-
-module.exports = window["wp"]["data"];
 
 /***/ }),
 
@@ -1287,7 +1196,7 @@ function _extends() {
   \************************/
 /***/ ((module) => {
 
-module.exports = JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":2,"name":"create-block/pageblock","version":"0.1.0","title":"Pageblock","category":"widgets","icon":"admin-page","description":"Example static block scaffolded with Create Block tool.","supports":{"html":false},"attributes":{"header_title":{"type":"object","default":{"text":"","tag":"h2","align":"","color":""}},"header_subtitle":{"type":"object","default":{"text":"","tag":"small","color":""}},"image":{"type":"object","default":{"url":"","id":"","alt":"","color":""}},"showHeader":{"type":"boolean","default":true},"showTitle":{"type":"boolean","default":true},"showSubtitle":{"type":"boolean","default":true},"showImage":{"type":"boolean","default":true},"row_one":{"type":"object","default":{"subtitle":"","title":"","text":"","selector":".row-one","align":"","back":"","color":"","url":"","id":"","alt":""}},"showRowOne":{"type":"boolean","default":true},"showRowOneImage":{"type":"boolean","default":true},"showRowOneSubtitle":{"type":"boolean","default":true},"showRowOneTitle":{"type":"boolean","default":true},"showRowOneText":{"type":"boolean","default":true},"row_two":{"type":"object","default":{"subtitle":"","title":"","text":"","selector":".row-two","align":"","back":"","color":"","url":"","id":"","alt":""}},"showRowTwo":{"type":"boolean","default":true},"showRowTwoImage":{"type":"boolean","default":true},"showRowTwoSubtitle":{"type":"boolean","default":true},"showRowTwoTitle":{"type":"boolean","default":true},"showRowTwoText":{"type":"boolean","default":true},"showAboutUs":{"type":"boolean","default":true},"staff":{"type":"array","default":[]},"showStaff":{"type":"boolean","default":true},"staffNumber":{"type":"number","default":1},"showContactUs":{"type":"boolean","default":true},"contact_form":{"type":"object","default":{"title":"","name":"","email":"","message":"","submit":"","success":"","error":"","selector":".contact-form"}},"showContactForm":{"type":"boolean","default":true},"showContactFormTitle":{"type":"boolean","default":true},"staffImage":{"type":"object","default":{"url":"","id":"","alt":"","source_url":""}},"showName":{"type":"boolean","default":true}},"textdomain":"pageblock","editorScript":"file:./index.js"}');
+module.exports = JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":2,"name":"create-block/pageblock","version":"0.1.0","title":"Pageblock","category":"widgets","icon":"admin-page","description":"Example static block scaffolded with Create Block tool.","supports":{"html":false,"align":true,"alignLeft":false,"alignRight":false},"attributes":{"header_title":{"type":"object","default":{"text":"","tag":"h2","align":"","color":"","size":""}},"header_subtitle":{"type":"object","default":{"text":"","tag":"small","color":"","size":""}},"image":{"type":"object","default":{"url":"","id":"","alt":"","color":""}},"showHeader":{"type":"boolean","default":true},"showTitle":{"type":"boolean","default":true},"showSubtitle":{"type":"boolean","default":true},"showImage":{"type":"boolean","default":true},"row_one":{"type":"object","default":{"subtitle":"","title":"","text":"","selector":".row-one","align":"","back":"","color":"","url":"","id":"","alt":""}},"showRowOne":{"type":"boolean","default":true},"showRowOneImage":{"type":"boolean","default":true},"showRowOneSubtitle":{"type":"boolean","default":true},"showRowOneTitle":{"type":"boolean","default":true},"showRowOneText":{"type":"boolean","default":true},"row_two":{"type":"object","default":{"subtitle":"","title":"","text":"","selector":".row-two","align":"","back":"","color":"","url":"","id":"","alt":""}},"showRowTwo":{"type":"boolean","default":true},"showRowTwoImage":{"type":"boolean","default":true},"showRowTwoSubtitle":{"type":"boolean","default":true},"showRowTwoTitle":{"type":"boolean","default":true},"showRowTwoText":{"type":"boolean","default":true},"showAboutUs":{"type":"boolean","default":true},"staff":{"type":"array","default":[]},"showStaff":{"type":"boolean","default":true},"staffNumber":{"type":"number","default":1},"showContactUs":{"type":"boolean","default":true},"contact_form":{"type":"object","default":{"title":"","name":"","email":"","message":"","submit":"","success":"","error":"","selector":".contact-form"}},"showContactForm":{"type":"boolean","default":true},"showContactFormTitle":{"type":"boolean","default":true},"showName":{"type":"boolean","default":true}},"textdomain":"pageblock","editorScript":"file:./index.js"}');
 
 /***/ })
 
